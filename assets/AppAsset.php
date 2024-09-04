@@ -17,7 +17,7 @@ class AppAsset extends AssetBundle
     public $js = [];
     public $depends = [
         'yii\web\YiiAsset',
-        'yii\bootstrap4\BootstrapAsset',
+        'yii\bootstrap5\BootstrapAsset',
     ];
 
     /**
@@ -41,6 +41,7 @@ class AppAsset extends AssetBundle
             'css/chosen.css',
             'css/jquery.fancybox.min.css',
             'css/toastr.min.css',
+            'css/admin.css?v='.mt_rand(1000,10000),
             'css/site.css?v='.mt_rand(1000,10000),
         ];
     }
