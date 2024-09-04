@@ -1,19 +1,11 @@
 <?php
-/**
- * @link https://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license https://www.yiiframework.com/license/
- */
 
 namespace app\assets;
 
 use yii\web\AssetBundle;
 
 /**
- * Main application asset bundle.
- *
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
+ * Main backend application asset bundle.
  */
 class AppAsset extends AssetBundle
 {
@@ -22,10 +14,52 @@ class AppAsset extends AssetBundle
     public $css = [
         'css/site.css',
     ];
-    public $js = [
-    ];
+    public $js = [];
     public $depends = [
         'yii\web\YiiAsset',
-        'yii\bootstrap5\BootstrapAsset'
+        'yii\bootstrap4\BootstrapAsset',
     ];
+
+    /**
+     *
+     */
+    public function init()
+    {
+        $this->css = static::getCss();
+        $this->js = static::getJs();
+    }
+
+    /**
+     * @return array
+     */
+    public static function getCss()
+    {
+        return [
+            'css/bootstrap-icons.css',
+            'css/font-awesome.min.css',
+            'css/jquery-ui.min.css',
+            'css/chosen.css',
+            'css/jquery.fancybox.min.css',
+            'css/toastr.min.css',
+            'css/site.css?v='.mt_rand(1000,10000),
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public static function getJs()
+    {
+        return [
+            'js/jquery-ui.min.js',
+            'js/bootstrap.min.js',
+            'js/chosen.jquery.min.js',
+            'js/jquery.fancybox.min.js',
+            'js/inputmask.js',
+            'js/jquery.inputmask.js',
+            'js/toastr.min.js',
+            'js/functions.js?v='.mt_rand(1000,10000),
+            'js/common.js?v='.mt_rand(1000,10000),
+        ];
+    }
 }

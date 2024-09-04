@@ -5,16 +5,19 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'name' => 'Ngrad',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
+        '@upload' => '@app/web/upload',
     ],
     'components' => [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'XAa-0zlrc4kfgMuLeSVufjMZlh9Kh8L2',
+            'baseUrl' => '',
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
@@ -41,17 +44,19 @@ $config = [
                 ],
             ],
         ],
+        'infoLog' => [
+            'class' => 'app\components\InfoLog',
+        ],
         'db' => $db,
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
             ],
         ],
-        */
     ],
     'params' => $params,
+    //'defaultRoute' => 'product/index',
 ];
 
 if (YII_ENV_DEV) {
