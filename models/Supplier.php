@@ -13,7 +13,7 @@ use yii\web\IdentityInterface;
  * Клиенты
  *
  */
-class Client extends BaseModel
+class Supplier extends BaseModel
 {
     const STATUS_ONE_TIME = 1;
     const STATUS_REGULAR  = 2;
@@ -23,7 +23,7 @@ class Client extends BaseModel
      */
     public static function tableName()
     {
-        return '{{%clients}}';
+        return '{{%suppliers}}';
     }
 
     /**
@@ -31,7 +31,7 @@ class Client extends BaseModel
      */
     public static function modelName()
     {
-        return 'Заказчики';
+        return 'Поставщики';
     }
 
     /**
@@ -39,7 +39,7 @@ class Client extends BaseModel
      */
     public static function typeId()
     {
-        return Gallery::TYPE_CLIENT;
+        return Gallery::TYPE_SUPPLIER;
     }
 
     /**
@@ -93,3 +93,4 @@ class Client extends BaseModel
         ];
     }
 }
+

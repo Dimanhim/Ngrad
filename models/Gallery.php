@@ -25,6 +25,7 @@ class Gallery extends BaseModel
     const TYPE_ORDER          = 1;
     const TYPE_IMAGE          = 2;
     const TYPE_CLIENT         = 3;
+    const TYPE_SUPPLIER       = 4;
 
     const TYPE_ANY            = 15;
 

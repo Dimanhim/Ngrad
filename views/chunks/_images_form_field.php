@@ -1,5 +1,5 @@
 <?php
-use backend\components\Helpers;
+use app\components\Helpers;
 use kartik\widgets\FileInput;
 
 $rows = isset($rows) ? $rows : null;
