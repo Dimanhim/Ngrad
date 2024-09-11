@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\ProductAttributeCategory;
 use Yii;
 use yii\filters\ContentNegotiator;
 use yii\web\Controller;
@@ -29,6 +30,35 @@ class AjaxController extends Controller
             ],
         ];
     }
+
+    /**
+     * @return mixed
+     */
+    public function actionGetProductCategoryField()
+    {
+        $productAttributeCategoryId = Yii::$app->request->post('product_category_id');
+        if($productAttributeCategory = ProductAttributeCategory::findOne($productAttributeCategoryId)) {
+            if($costItem = $productAttributeCategory->getCostItemHtml()) {
+                $this->addData($costItem);
+            }
+        }
+        return $this->response();
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Добавляет текст первой ошибки из модели

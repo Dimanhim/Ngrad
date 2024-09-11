@@ -86,3 +86,33 @@ a.desc:after {
 .form-group {
     margin-bottom: 1rem;
 }
+.card {
+    margin-bottom: 1rem;
+}
+
+.product-attribute-container {
+    margin-top: 10px;
+}
+.product-attrubute-container:first-child {
+    margin-top: 0;
+}
+.added-block .added-range,
+.mgt36
+{
+    margin: 36px 0 0;
+}
+.added-block .added-field,
+.mgt31
+{
+    margin-top: 31px;
+}
+.product-attribute-total-cost {
+    clear: both;
+    margin-top: 30px;
+}
+.pd5 {
+    padding: 0 5px;
+}
+
+
+

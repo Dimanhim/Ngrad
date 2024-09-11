@@ -47,11 +47,13 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
             ['label' => 'Закупка расходников', 'url' => ['/payment-attribute/index']],
             ['label' => 'Заказы товаров', 'url' => ['/order/index']],
             ['label' => 'Справочник', 'items' => [
-                ['label' => 'Размеры', 'url' => ['/client/index']],
+                ['label' => 'Размеры', 'url' => ['/product-size/index']],
                 ['label' => 'Модель', 'url' => ['/client/index']],
                 ['label' => 'Поставщики', 'url' => ['/supplier/index']],
-                ['label' => 'Коллекция', 'url' => ['/client/index']],
+                ['label' => 'Коллекция', 'url' => ['/product-collection/index']],
                 ['label' => 'Заказчики', 'url' => ['/client/index']],
+                ['label' => '--Категории атрибутов', 'url' => ['/product-attribute-category/index']],
+                ['label' => '--Атрибуты', 'url' => ['/product-attribute/index']],
             ]],
             Yii::$app->user->isGuest
                 ? ['label' => 'Вход', 'url' => ['/site/login']]

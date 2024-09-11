@@ -22,12 +22,18 @@ use Yii;
  */
 class Gallery extends BaseModel
 {
-    const TYPE_ORDER          = 1;
-    const TYPE_IMAGE          = 2;
-    const TYPE_CLIENT         = 3;
-    const TYPE_SUPPLIER       = 4;
+    const TYPE_ORDER                 = 1;
+    const TYPE_IMAGE                 = 2;
+    const TYPE_CLIENT                = 3;
+    const TYPE_SUPPLIER              = 4;
+    const TYPE_PRODUCT               = 5;
+    const TYPE_PRODUCT_COLLECTION    = 6;
+    const TYPE_PRODUCT_SIZE          = 7;
+    const TYPE_PRODUCT_ATTRIBUTE     = 8;
+    const TYPE_PRODUCT_ATTRIBUTE_CATEGORIES    = 9;
+    const TYPE_PURCHASES             = 10;
 
-    const TYPE_ANY            = 15;
+    const TYPE_ANY                   = 99;
 
     /**
      * {@inheritdoc}

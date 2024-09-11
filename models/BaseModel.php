@@ -34,6 +34,8 @@ class BaseModel extends ActiveRecord
         'id', 'unique_id', 'is_active', 'deleted', 'position', 'created_at', 'updated_at'
     ];
 
+    public $_free_field;
+
     /**
      * @return array
      */
@@ -78,7 +80,7 @@ class BaseModel extends ActiveRecord
     public function rules()
     {
         return [
-            [['image_field', 'image_fields', 'image_preview_field', 'unique_id', 'is_active', 'deleted', 'position', 'created_at', 'updated_at'], 'safe'],
+            [['image_field', 'image_fields', 'image_preview_field', '_free_field', 'unique_id', 'is_active', 'deleted', 'position', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -189,7 +191,7 @@ class BaseModel extends ActiveRecord
     /**
      * @return mixed
      */
-    public function findSearch()
+    public static function findSearch()
     {
         return self::className()::find()->where(['is', 'deleted', null])->orderBy(['position' => 'SORT ASC', 'id' => 'SORT DESC']);
     }

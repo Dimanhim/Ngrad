@@ -10,7 +10,7 @@ $(document).ready(function() {
                 sort.push($(element).attr('data-id'));
             });
             $.ajax({
-                url: '/admin/images/save-sort',
+                url: '/images/save-sort',
                 method: 'post',
                 data: {ids: JSON.stringify(sort)},
                 success(response) {
@@ -70,6 +70,42 @@ $(document).ready(function() {
             }
         }
     }
+
+
+    // CUSTOM
+    $(document).on('click', '.btn-add-product-category-o', function(e) {
+        e.preventDefault();
+        let self = $(this);
+        let parent = self.closest('.product-attribute-container');
+        let product_category_id = self.attr('data-product-category-id');
+        $.ajax({
+            url: '/ajax/get-product-category-field',
+            type: 'POST',
+            data: {product_category_id: product_category_id},
+            success: function (res) {
+                if(res.error == 0 && res.data.length) {
+                    console.log('data', res.data)
+                    parent.after(res.data);
+                }
+            },
+            error: function (e) {
+                console.log('Error!', e);
+            }
+        });
+    });
+
+    $(document).on('click', '.btn-remove-product-category-o', function(e) {
+        e.preventDefault();
+        let parent = $(this).closest('.product-attribute-container');
+        parent.remove();
+    });
+
+    $(document).on('change', '.select-collection-o', function(e) {
+        e.preventDefault();
+        let btn = $('.btn-collection-o');
+        let collection_id = $(this).val();
+        btn.attr('href', '/product/create?collection_id=' + collection_id);
+    });
 
 
     initPlugins()
