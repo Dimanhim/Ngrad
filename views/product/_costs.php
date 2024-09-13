@@ -40,10 +40,10 @@ if($model->_categories) :
         <div class="row">
             <div class="col-md-9">
                 <label for="total-cost">Итоговая стоимость расходников</label>
-                <?= Html::textInput('total-cost', null, ['class' => 'form-control total-cost-o', 'placeholder' => 'Формируется автоматически после расчета']) ?>
+                <?= Html::textInput('total-cost', $model->fullCost, ['class' => 'form-control total-cost-o', 'placeholder' => 'Формируется автоматически после расчета']) ?>
             </div>
             <div class="col-md-3">
-                <?= Html::a('Рассчитать', ['#'], ['class' => 'btn btn-xs btn-success mgt31 btn-total-cost-o']) ?>
+                <?= Html::a('Рассчитать', ['#'], ['class' => 'btn btn-xs btn-success mgt31 btn-total-cost-o', 'data-product' => $model->id]) ?>
             </div>
         </div>
     </div>

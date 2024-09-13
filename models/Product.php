@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\models\traits\ProductTrait;
+use function PHPUnit\Framework\isReadable;
 use Yii;
 
 /**
@@ -24,6 +25,7 @@ class Product extends \app\models\BaseModel
 
     public $_categories = [];
     public $_cat_fields = ['attributes', 'values'];
+    public $_cost_values = [];
 
     /**
      * {@inheritdoc}
@@ -73,6 +75,11 @@ class Product extends \app\models\BaseModel
         ]);
     }
 
+    public function init()
+    {
+        return parent::init();
+    }
+
     /**
      *
      */
@@ -84,6 +91,7 @@ class Product extends \app\models\BaseModel
     public function beforeSave($insert)
     {
         $this->handleCollection();
+
         return parent::beforeSave($insert);
     }
 
@@ -125,6 +133,38 @@ class Product extends \app\models\BaseModel
 
         }
         return ProductAttributeCategory::findModels()->all();
+    }
+
+    /**
+     * @return float|int
+     */
+    public function getFullCost()
+    {
+        $totalPrice = 0;
+
+        if(!$this->_categories) $this->setRelations();
+
+        foreach($this->_categories as $categoryValues) {
+            if(isset($categoryValues['product_attributes']) and $categoryValues['product_attributes']) {
+                foreach($categoryValues['product_attributes'] as $attributeValues) {
+                    $attribute = $attributeValues['product_attribute'];
+                    $relation = $attributeValues['product_relation'];
+
+                    if($attribute->price and $relation->qty) {
+                        $totalPrice += $attribute->price * $relation->qty;
+                    }
+                }
+            }
+        }
+
+        return $totalPrice;
+    }
+
+    public function getAttributesTableHtml()
+    {
+        return Yii::$app->controller->renderPartial('//product/_attribute_table', [
+            'model' => $this,
+        ]);
     }
 
 

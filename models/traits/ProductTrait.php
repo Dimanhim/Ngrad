@@ -55,6 +55,8 @@ trait ProductTrait
      */
     public function setRelations()
     {
+        if($this->_categories) return false;
+
         $data = $this->setDefaultRelations();
 
         $productRelations = $this->productRelations;
@@ -107,5 +109,10 @@ trait ProductTrait
         }
 
         return $data;
+    }
+
+    public function setCostValues()
+    {
+
     }
 }

@@ -50,8 +50,12 @@ class ProductController extends BaseController
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+
+        $model->setRelations();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
         ]);
     }
 

@@ -12,7 +12,7 @@ $attributeId = $attribute->id ?? null;
 $relationQty = $relation->qty ?? null;
 
 ?>
-<div class="product-attribute-container">
+<div class="product-attribute-container product-attribute-container-o">
     <div class="row">
         <div class="col-md-3">
             <?= $category->name ?>
@@ -22,10 +22,10 @@ $relationQty = $relation->qty ?? null;
                     $model,
                     "_cat_fields[attributes][]",
                     $category->getAttributeItems(),
-                    ['prompt' => '[Выбрать '.$category->name.']', 'class' => 'form-control form-control-sm', 'value' =>  $attributeId]) ?>
+                    ['prompt' => '[Выбрать '.$category->name.']', 'class' => 'form-control form-control-sm product-attribute-id-o', 'value' =>  $attributeId, 'data-category-id' => $category->id]) ?>
         </div>
         <div class="col-md-3">
-            <?= Html::activeInput('text', $model, "_cat_fields[values][]", ['class' => 'form-control  form-control-sm', 'placeholder' => $category->getShortTypeText(), 'value' => $relationQty]) ?>
+            <?= Html::activeInput('text', $model, "_cat_fields[values][]", ['class' => 'form-control  form-control-sm product-attribute-qty-o', 'placeholder' => $category->getShortTypeText(), 'value' => $relationQty]) ?>
         </div>
         <div class="col-md-3">
             <?= Html::a('<i class="bi bi-plus"></i>', ['#'], [

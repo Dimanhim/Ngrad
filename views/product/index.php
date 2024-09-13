@@ -36,6 +36,13 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
+            [
+                'attribute' => 'image_fields',
+                'format' => 'raw',
+                'value' => function($data) {
+                    return $data->mainImageHtml;
+                }
+            ],
             'name',
             [
                 'attribute' => 'collection_id',
@@ -46,12 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 }
             ],
-            'collection_id',
-            'is_active',
-            //'deleted',
-            //'position',
-            //'created_at',
-            //'updated_at',
+            'is_active:boolean',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Product $model, $key, $index, $column) {

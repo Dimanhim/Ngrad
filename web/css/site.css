@@ -113,6 +113,9 @@ a.desc:after {
 .pd5 {
     padding: 0 5px;
 }
+.table-attributes-list {
+    box-shadow: 1px 1px 1px #aaa, -1px -1px 1px #aaa;
+}
 
 
 

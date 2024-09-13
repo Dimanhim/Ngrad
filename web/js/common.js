@@ -84,7 +84,6 @@ $(document).ready(function() {
             data: {product_category_id: product_category_id},
             success: function (res) {
                 if(res.error == 0 && res.data.length) {
-                    console.log('data', res.data)
                     parent.after(res.data);
                 }
             },
@@ -105,6 +104,11 @@ $(document).ready(function() {
         let btn = $('.btn-collection-o');
         let collection_id = $(this).val();
         btn.attr('href', '/product/create?collection_id=' + collection_id);
+    });
+
+    $(document).on('click', '.btn-total-cost-o', function(e) {
+        e.preventDefault();
+        calculateAttributes();
     });
 
 

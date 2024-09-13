@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\ProductAttribute;
 use app\models\ProductAttributeCategory;
 use Yii;
 use yii\filters\ContentNegotiator;
@@ -44,6 +45,28 @@ class AjaxController extends Controller
         }
         return $this->response();
 
+    }
+
+    /**
+     * @return mixed
+     */
+    public function actionGetAttributesCost()
+    {
+        $totalPrice = 0;
+        $dataJson = Yii::$app->request->post('data');
+        if($data = json_decode($dataJson, true)) {
+            foreach($data as $values) {
+                if($attribute = ProductAttribute::findOne($values['attribute_id'])) {
+                    if($values['qty']) {
+                        $totalPrice += $attribute->price * $values['qty'];
+                    }
+                }
+            }
+        }
+
+        $this->addData($totalPrice);
+
+        return $this->response();
     }
 
 
