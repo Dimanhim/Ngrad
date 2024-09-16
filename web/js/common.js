@@ -111,6 +111,30 @@ $(document).ready(function() {
         calculateAttributes();
     });
 
+    $(document).on('click', '.product-size-o', function(e) {
+        e.preventDefault();
+        if($(this).hasClass('active')) {
+            $(this).removeClass('active');
+        }
+        else {
+            $(this).addClass('active');
+        }
+        setOrderData()
+    });
+
+    /**
+     *  расчитать заказ
+     * */
+    $(document).on('click', '.calculate-order-btn-o', function(e) {
+        e.preventDefault();
+        calculateOrderPrice();
+    });
+
+    $(document).on('change', '.product-count-o select', function(e) {
+        e.preventDefault();
+        setOrderData()
+    });
+
 
     initPlugins()
 })

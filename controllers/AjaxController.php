@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Product;
 use app\models\ProductAttribute;
 use app\models\ProductAttributeCategory;
 use Yii;
@@ -65,6 +66,31 @@ class AjaxController extends Controller
         }
 
         $this->addData($totalPrice);
+
+        return $this->response();
+    }
+
+    /**
+     * @return bool|mixed
+     */
+    public function actionCalculateOrder()
+    {
+        $totalPrice = 0;
+        $data = Yii::$app->request->post('data');
+
+        if(!$data) {
+            return false;
+        }
+
+        foreach($data as $values) {
+            if($product = Product::findOne($values['product_id'])) {
+                $cost = $product->fullCost;
+                if($values['count']) {
+                    $totalPrice += $cost * $values['count'];
+                }
+            }
+        }
+        $this->addData([$totalPrice]);
 
         return $this->response();
     }

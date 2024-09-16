@@ -1,17 +1,22 @@
 <?php
 
 use app\models\Product;
+use app\models\ProductSize;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use app\models\ProductCollection;
+use yii\widgets\ListView;
+use app\models\Supplier;
+use app\models\OrderForm;
 
 /** @var yii\web\View $this */
 /** @var app\models\ProductSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="product-index">
 
@@ -25,43 +30,23 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-md-2">
             <p>
-                <?= Html::a('Добавить', ['create'], ['class' => 'btn btn-success btn-collection-o']) ?>
+                <?= Html::a('Создать товар', ['create'], ['class' => 'btn btn-success btn-collection-o']) ?>
             </p>
         </div>
     </div>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            [
-                'attribute' => 'image_fields',
-                'format' => 'raw',
-                'value' => function($data) {
-                    return $data->mainImageHtml;
-                }
-            ],
-            'name',
-            [
-                'attribute' => 'collection_id',
-                'format' => 'raw',
-                'value' => function($data) {
-                    if($data->collection) {
-                        return $data->collection->name;
-                    }
-                }
-            ],
-            'is_active:boolean',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Product $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                }
-            ],
-        ],
+    <?= ListView::widget([
+        'dataProvider' => $searchModel->search(Yii::$app->request->queryParams),
+        'emptyText' => false,
+        'layout' => "{items}\n{pager}",
+        'options' => ['class' => 'product-list'],
+        'itemOptions' => ['tag' => false],
+        'itemView' => '//product/_item_product',
     ]); ?>
+
+    <?= $this->render('_order_form', [
+        'model' => new OrderForm(),
+    ]) ?>
 
 
 </div>

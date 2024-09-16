@@ -66,6 +66,7 @@ class Client extends BaseModel
             'comment' => 'Комментарий',
             'type' => 'Тип',                    // Пока непонятно для чего
             'status_id' => 'Статус',
+
         ]);
     }
 
@@ -77,7 +78,10 @@ class Client extends BaseModel
         return parent::beforeSave($insert);
     }
 
-    public function afterSave($insert, $changetAttributes)
+    /**
+     * @param $insert
+     * @param $changetAttributes
+     */public function afterSave($insert, $changetAttributes)
     {
         return parent::afterSave($insert, $changetAttributes);
     }

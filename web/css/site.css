@@ -116,6 +116,30 @@ a.desc:after {
 .table-attributes-list {
     box-shadow: 1px 1px 1px #aaa, -1px -1px 1px #aaa;
 }
+.table-products-total td {
+    font-weight: 800;
+}
+.total-th {
+    float:right;
+}
+.product-size {
+    cursor: pointer;
+}
+.product-size.active {
+    background: #c9f4d3;
+}
+#form-create-order .select2-container--krajee-bs4 .select2-selection--single {
+    height: calc(1.5em + 0.5rem + 2px);
+    padding: 0.25rem 0.5rem;
+}
+#form-create-order .selection span,
+#form-create-order .help-block {
+    font-size: 0.875rem;
+}
+#form-create-order .form-group {
+    margin-bottom: 0;
+}
+
 
 
 

@@ -109,6 +109,40 @@ class ProductAttributeCategory extends \app\models\BaseModel
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProductRelations(Product $product = null)
+    {
+        if(!$product) return null;
+
+        $data = [];
+
+        if($relations = $product->productRelations) {
+            foreach($relations as $relation) {
+                if($relation->productAttribute and  ($category = $relation->productAttribute->category) and $category->id == $this->id) {
+                    $data[] = $relation;
+                }
+            }
+        }
+
+        return $data;
+
+
+
+        return $this->hasMany(ProductAttributesRelation::className(), ['product_attribute_id' => 'id'])
+            ->viaTable('product_attributes', ['category_id' => 'id'])
+            ->andWhere(['is_active' => 1, 'deleted' => null])->orderBy(['position' => SORT_ASC]);
+    }
+
+
+
+    /*public function getTeachers()
+    {
+        return $this->hasMany(Teacher::className(), ['id' => 'teacher_id'])
+            ->viaTable(Yii::$app->db->tablePrefix.'course_teachers', ['course_id' => 'id']);
+    }*/
+
+    /**
      * @return array
      */
     public function getAttributeItems()

@@ -2,8 +2,13 @@
 
 namespace app\controllers;
 
+use app\models\Client;
+use app\models\Order;
+use app\models\OrderForm;
 use app\models\Product;
 use app\models\ProductSearch;
+use app\models\ProductSize;
+use app\models\Supplier;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -36,9 +41,21 @@ class ProductController extends BaseController
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
+        $products = Product::findModels()->all();
+
+        $totalCount = $dataProvider->totalCount;
+
+        /*$product = Product::findOne(7);
+        $product->setRelations();*/
+
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+
+            'products' => $products,
+            'productSizes' => ProductSize::getList(),
+            'productCount' => Product::getPurchasesCount(),
+            'totalCount' => $totalCount,
         ]);
     }
 
@@ -103,5 +120,33 @@ class ProductController extends BaseController
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    public function actionCreateOrder()
+    {
+        $model = new OrderForm();
+        if($model->load(\Yii::$app->request->post())) {
+            if($model->validate()) {
+                $order = new Order();
+                $order->_purchases = json_decode($model->data, true);
+                if($model->supplier_id) $order->client_id = $model->supplier_id;
+                elseif($model->supplier_name) {
+                    $client = new Client();
+                    $client->name = $model->supplier_name;
+                    if($client->save()) {
+                        $order->client_id = $client->id;
+                    }
+                }
+                $order->date_order = time();
+
+                $order->setPrice();
+
+
+                if($order->save()) {
+                    return $this->redirect(['order/view', 'id' => $order->id]);
+                }
+            }
+            return $this->redirect(['index']);
+        }
     }
 }

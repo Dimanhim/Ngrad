@@ -55,6 +55,7 @@ trait ProductTrait
      */
     public function setRelations()
     {
+        $maxAttributeCount = 0;
         if($this->_categories) return false;
 
         $data = $this->setDefaultRelations();
@@ -69,12 +70,14 @@ trait ProductTrait
                             'product_attribute' => $productAttribute,
                             'product_relation' => $productRelation,
                         ];
+                        $maxAttributeCount += 1;
                     }
                 }
             }
         }
 
         $this->_categories = $data;
+        $this->maxAttributeCount = $maxAttributeCount;
 
         return $data;
 

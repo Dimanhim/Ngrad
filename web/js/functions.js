@@ -36,7 +36,47 @@
                 })
             }
         })
-        console.log('data', data)
+        return data;
+    }
+
+    function calculateOrderPrice() {
+        $.ajax({
+            url: '/ajax/calculate-order',
+            type: 'POST',
+            data: {data: setOrderData()},
+            success: function (res) {
+                console.log('res', res)
+                if(res.data) {
+                    $('.calculate-order-o').val(res.data)
+                }
+            },
+            error: function (e) {
+                console.log('Error!', e);
+            }
+        });
+    }
+
+    function setOrderData() {
+    // надо сюда поставщика приплести как то
+        let data = [];
+        let product_row = $('.product-id-o');
+        product_row.each(function(index_p, element_p) {
+            let el_p = $(element_p);
+            let product_id = el_p.attr('data-id')
+            let selected_sizes = el_p.find('.product-size-o.active');
+            selected_sizes.each(function(index_a, element_a) {
+                let el_a = $(element_a);
+                let size = el_a.text();
+                let count = el_a.closest('tr').find('.product-count-o select').val();
+
+                data.push({
+                    product_id: product_id,
+                    size: size,
+                    count: count,
+                })
+            });
+        });
+        $('.total-data-o').val(JSON.stringify(data))
         return data;
     }
 

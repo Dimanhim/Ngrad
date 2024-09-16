@@ -32,6 +32,7 @@ class Gallery extends BaseModel
     const TYPE_PRODUCT_ATTRIBUTE     = 8;
     const TYPE_PRODUCT_ATTRIBUTE_CATEGORIES    = 9;
     const TYPE_PURCHASES             = 10;
+    const TYPE_ORDERS                = 11;
 
     const TYPE_ANY                   = 99;
 

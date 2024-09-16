@@ -5,6 +5,7 @@ namespace app\models;
 use app\models\traits\ProductTrait;
 use function PHPUnit\Framework\isReadable;
 use Yii;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "products".
@@ -25,7 +26,9 @@ class Product extends \app\models\BaseModel
 
     public $_categories = [];
     public $_cat_fields = ['attributes', 'values'];
-    public $_cost_values = [];
+    //public $_cost_values = [];
+
+    public $maxAttributeCount = null;
 
     /**
      * {@inheritdoc}
@@ -122,11 +125,18 @@ class Product extends \app\models\BaseModel
         return $this->hasMany(ProductAttributesRelation::className(), ['product_id' => 'id'])->andWhere(['is_active' => 1, 'deleted' => null])->orderBy(['position' => SORT_ASC]);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getOrders()
+    {
+        return $this->hasMany(Order::className(), ['product_id' => 'id']);
+    }
+
     public function getProductAttributeCategories()
     {
         if($this->_categories and $this->_categories['product_attribute_id'] and $this->_categories['values']) {
             $productAtributeIds = [];
-            $productAtributeCategories = [];
             foreach($this->_categories['product_attribute_id'] as $productAttributeId) {
                 $productAtributeIds[] = $productAttributeId;
             }
@@ -165,6 +175,43 @@ class Product extends \app\models\BaseModel
         return Yii::$app->controller->renderPartial('//product/_attribute_table', [
             'model' => $this,
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getPurchasesCount()
+    {
+        $items = 10;
+
+        $data = [];
+        for($i = 1; $i <= $items; $i++) {
+            $data[$i] = $i;
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return string
+     */
+    public function getActionButtons($action = null)
+    {
+        if(!$action) return false;
+
+        $str = '';
+
+        if($action == 'view') {
+            $str .= Html::a('<i class="bi bi-eye"></i>', ['product/view', 'id' => $this->id], ['class' => 'btn btn-xs btn-success']);
+        }
+        if($action == 'update') {
+            $str .= Html::a('<i class="bi bi-pencil"></i>', ['product/update', 'id' => $this->id], ['class' => 'btn btn-xs btn-primary']);
+        }
+        if($action == 'delete') {
+            $str .= Html::a('<i class="bi bi-trash"></i>', ['product/delete', 'id' => $this->id], ['class' => 'btn btn-xs btn-danger']);
+        }
+
+        return $str;
     }
 
 

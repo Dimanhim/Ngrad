@@ -227,6 +227,23 @@ class BaseModel extends ActiveRecord
     }
 
     /**
+     * @return array
+     */
+    public static function getListKeys()
+    {
+        $data = [];
+        $data = [];
+
+        if($models = self::findModels()->andWhere(['not', ['name' => null]])->asArray()->all()) {
+            foreach($models as $model) {
+                $data[] = $model['name'];
+            }
+        }
+
+        return $data;
+    }
+
+    /**
      * @return array|ActiveRecord[]
      */
     public function getGallery()
