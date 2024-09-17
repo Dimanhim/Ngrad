@@ -61,7 +61,7 @@ class Product extends \app\models\BaseModel
     {
         return array_merge(parent::rules(), [
             [['collection_id'], 'integer'],
-            [['name'], 'string', 'max' => 255],
+            [['name', 'model_name'], 'string', 'max' => 255],
             [['_categories', '_cat_fields'], 'safe'],
         ]);
     }
@@ -73,6 +73,7 @@ class Product extends \app\models\BaseModel
     {
         return array_merge(parent::attributeLabels(), [
             'name' => 'Название',
+            'model_name' => 'Модель',
             '_cat_fields' => 'Расходники',
             'collection_id' => 'Коллекция',
         ]);

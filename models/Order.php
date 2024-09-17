@@ -73,13 +73,15 @@ class Order extends \app\models\BaseModel
     public function attributeLabels()
     {
         return [
+            'id' => 'Номер',
             'date_order' => 'Дата заказа',
             'date_shipping' => 'Дата отгрузки',
             'client_id' => 'Заказчик',
-            'price' => 'Цена',
+            'price' => 'Сумма',
             'phone' => 'Телефон',
             'status_id' => 'Статус',
             '_purchases' => 'Позиции заказа',
+            'created_at' => 'Дата создания',
         ];
     }
 
@@ -115,8 +117,15 @@ class Order extends \app\models\BaseModel
         if($this->phone) {
             $this->phone = Helpers::phoneFormat($this->phone);
         }
-        $this->handlePurchases();
+
         return parent::beforeSave($insert);
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        $this->handlePurchases();
+
+        return parent::afterSave($insert, $changedAttributes);
     }
 
     /**
@@ -151,5 +160,31 @@ class Order extends \app\models\BaseModel
             }
         }
         $this->price = $fullPrice;
+    }
+
+    public function getPurchasesHtml()
+    {
+        return Yii::$app->controller->renderPartial('//order/_purchases', [
+            'model' => $this,
+        ]);
+    }
+
+    public function getFormatPrice()
+    {
+        $this->setPrice();
+
+        return number_format($this->price, 0, '', ' ') . ' р.';
+    }
+
+    public function getCountProducts()
+    {
+        $count = 0;
+
+        if($this->purchases) {
+            foreach($this->purchases as $purchase) {
+                $count += $purchase->qty;
+            }
+        }
+        return $count;
     }
 }

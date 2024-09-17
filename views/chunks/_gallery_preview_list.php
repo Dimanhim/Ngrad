@@ -11,6 +11,9 @@ $class = (isset($rows) and $rows) ? 'col-md-'.$rows : 'col-md-6';
         <div class="image-preview-container">
             <div class="row image-preview-container-o">
                 <?php foreach($images as $image) : ?>
+
+                    <?php //if(!file_exists($image->filePath)) continue; ?>
+
                     <div class="<?= $class ?> image-preview image-preview-o" data-id="<?= $image->id ?>">
                         <div class="image-preview-content">
                             <a href="<?= $image->filePath ?>" <?= $image->galleryAttributes() ?>>

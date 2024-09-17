@@ -11,13 +11,16 @@ use app\models\Order;
  */
 class OrderSearch extends Order
 {
+    public $_created_from;
+    public $_created_to;
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['id', 'date_order', 'date_shipping', 'client_id', 'status_id', 'is_active', 'deleted', 'position', 'created_at', 'updated_at', 'unique_id', 'phone', 'price'], 'safe'],
+            [['id', 'date_order', 'client_id', 'phone', 'price', '_created_from', '_created_to'], 'safe'],
         ];
     }
 
@@ -53,6 +56,10 @@ class OrderSearch extends Order
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
+        }
+
+        if ($this->_created_from and $this->_created_to) {
+            $query->andWhere(['between', 'date_order', strtotime($this->_created_from), strtotime($this->_created_to) + (60 * 60 * 24) - 1]);
         }
 
         // grid filtering conditions

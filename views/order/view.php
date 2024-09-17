@@ -41,6 +41,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 }
             ],
+            [
+                'attribute' => 'Состав заказа',
+                'format' => 'raw',
+                'value' => function($data) {
+                    return $data->getPurchasesHtml();
+                }
+            ],
             'price',
             'phone',
             //'status_id',

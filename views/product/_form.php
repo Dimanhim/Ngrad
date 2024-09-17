@@ -25,6 +25,7 @@ use app\models\ProductCollection;
                         <div class="card-body">
                             <div class="added-block">
                                 <div class="row">
+                                    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
                                     <?php
                                         $classNumber = $model->isNewRecord ? 4 : 12;
                                     ?>
@@ -48,7 +49,7 @@ use app\models\ProductCollection;
                                     <?php endif; ?>
                                 </div>
                             </div>
-                            <?= $form->field($model, 'name')->textInput(['maxlength' => true])->label('Модель') ?>
+                            <?= $form->field($model, 'model_name')->textInput(['maxlength' => true])->label('Модель') ?>
                             <?= $form->field($model, 'is_active')->checkbox() ?>
                         </div>
                     </div>

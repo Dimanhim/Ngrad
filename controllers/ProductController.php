@@ -137,10 +137,9 @@ class ProductController extends BaseController
                         $order->client_id = $client->id;
                     }
                 }
-                $order->date_order = time();
+                $order->date_order = date('d.m.Y H:i:s');
 
                 $order->setPrice();
-
 
                 if($order->save()) {
                     return $this->redirect(['order/view', 'id' => $order->id]);

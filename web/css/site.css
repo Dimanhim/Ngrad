@@ -141,5 +141,16 @@ a.desc:after {
 }
 
 
+.card-view img {
+    width: 100%;
+}
+.card-view .bottom-border th,
+.card-view .bottom-border td,
+.card-view .bottom-border th
+{
+    border-bottom: 1px solid #000;
+}
+
+
 
 

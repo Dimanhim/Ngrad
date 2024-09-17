@@ -324,12 +324,12 @@ class BaseModel extends ActiveRecord
         return $img;
     }
 
-    public function getMainImageHtml()
+    public function getMainImageHtml($width = 100, $height = 100)
     {
         if($this->mainImage) {
             if(in_array($this->mainImage->extension, $this->mainImage->_images_extensions)) {
                 return Html::a(
-                    EasyThumbnailImage::thumbnailImg(Yii::getAlias('@upload').$this->mainImage->path, 100, 100, EasyThumbnailImage::THUMBNAIL_OUTBOUND),
+                    EasyThumbnailImage::thumbnailImg(Yii::getAlias('@upload').$this->mainImage->path, $width, $height, EasyThumbnailImage::THUMBNAIL_OUTBOUND),
                     $this->mainImage->filePath,
                     ['data-fancybox' => 'gallery']
                 );

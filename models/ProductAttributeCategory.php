@@ -91,6 +91,14 @@ class ProductAttributeCategory extends \app\models\BaseModel
         ];
     }
 
+    public static function getSmallTypes()
+    {
+        return [
+            self::TYPE_QTY => 'шт',
+            self::TYPE_MP  => 'м'
+        ];
+    }
+
     /**
      * @return mixed|null
      */
@@ -159,9 +167,9 @@ class ProductAttributeCategory extends \app\models\BaseModel
     /**
      * @return mixed|null
      */
-    public function getShortTypeText()
+    public function getShortTypeText($short = false)
     {
-        $shortTypes = self::getShortTypes();
+        $shortTypes = $short ? self::getSmallTypes() : self::getShortTypes();
         return $shortTypes[$this->type_id] ?? null;
     }
 
