@@ -34,8 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'phone',
             'email:email',
-            //'type',
-            //'status_id',
+            'is_active:boolean',
             [
                 'attribute' => 'is_active',
                 'value' => function($data) {

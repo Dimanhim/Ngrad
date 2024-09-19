@@ -232,7 +232,6 @@ class BaseModel extends ActiveRecord
     public static function getListKeys()
     {
         $data = [];
-        $data = [];
 
         if($models = self::findModels()->andWhere(['not', ['name' => null]])->asArray()->all()) {
             foreach($models as $model) {
@@ -421,7 +420,7 @@ class BaseModel extends ActiveRecord
     public function delete()
     {
         $this->deleted = 1;
-        return $this->update();
+        return $this->update(false);
     }
 
 

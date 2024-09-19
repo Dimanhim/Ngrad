@@ -2,9 +2,12 @@
 
 namespace app\controllers;
 
+use app\models\Order;
+use app\models\OrderPurchase;
 use app\models\Product;
 use app\models\ProductAttribute;
 use app\models\ProductAttributeCategory;
+use app\models\ProductSize;
 use Yii;
 use yii\filters\ContentNegotiator;
 use yii\web\Controller;
@@ -91,6 +94,121 @@ class AjaxController extends Controller
             }
         }
         $this->addData([$totalPrice]);
+
+        return $this->response();
+    }
+
+    /**
+     * @return mixed
+     * @throws \yii\db\Exception
+     */
+    public function actionChangeOrderDateShipping()
+    {
+        $order_id = Yii::$app->request->post('order_id');
+        $date = Yii::$app->request->post('date');
+        if($date and ($order = Order::findOne($order_id))) {
+            $order->date_shipping = $date;
+            if(!$order->save()) {
+                $this->_addError('Произошла ошибка обновления даты, пожалуйста, попробуйте позднее');
+            }
+            return $this->response();
+        }
+        else {
+            $this->_addError('Произошла неизвестная ошибка, пожалуйста, попробуйте позднее');
+        }
+
+        return $this->response();
+    }
+
+    public function actionAddOrderPurchaseField()
+    {
+        $order_id = Yii::$app->request->post('order_id');
+
+        if($order = Order::findOne($order_id)) {
+            $html = $order->getPurchaseFieldHtml();
+            if($html) {
+                return $this->response($html);
+            }
+        }
+
+        $this->_addError('Не удалось найти заказ');
+
+        return $this->response();
+    }
+
+    public function actionDeleteOrderPurchase()
+    {
+        $purchase_id = Yii::$app->request->post('purchase_id');
+
+        if($purchase = OrderPurchase::findOne($purchase_id)) {
+            if($purchase->delete()) {
+                return $this->response();
+            }
+            $this->_addError('Ошибка удаления поля');
+            return $this->response();
+        }
+
+        $this->_addError('Не удалось найти заказ');
+
+        return $this->response();
+    }
+
+    public function actionOrderPurchasesList()
+    {
+        $order_id = Yii::$app->request->post('order_id');
+
+        if($order = Order::findOne($order_id)) {
+            if($html = $order->getPurchasesTableList()) {
+                return $this->response($html);
+            }
+            $this->_addError('Ошибка обновления товаров');
+            return $this->response();
+        }
+
+        $this->_addError('Не удалось найти заказ');
+
+        return $this->response();
+    }
+
+    public function actionUpdateOrderHeader()
+    {
+        $order_id = Yii::$app->request->post('order_id');
+
+        if($order = Order::findOne($order_id)) {
+            if($html = $order->getOrderHeaderHtml()) {
+                return $this->response($html);
+            }
+            $this->_addError('Ошибка обновления');
+            return $this->response();
+        }
+
+        $this->_addError('Не удалось найти заказ');
+
+        return $this->response();
+    }
+
+    public function actionChangeOrderField()
+    {
+        $order_id = Yii::$app->request->post('order_id');
+        $purchase_id = Yii::$app->request->post('purchase_id');
+        $product_id = Yii::$app->request->post('product_id');
+        $sizeName = Yii::$app->request->post('size');
+        $qty = Yii::$app->request->post('qty');
+
+        if(!$model = OrderPurchase::findOne($purchase_id)) {
+            $model = new OrderPurchase();
+            $model->order_id = $order_id;
+        }
+        $model->product_id = $product_id;
+        if($size = ProductSize::findOne(['name' => $sizeName])) {
+            $model->size_id = $size->id;
+        }
+        $model->qty = $qty;
+        if($model->save()) {
+            return $this->response('Заказ успешно обновлен');
+        }
+
+        $this->_addError('Не удалось обновить заказ');
 
         return $this->response();
     }

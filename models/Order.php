@@ -133,7 +133,7 @@ class Order extends \app\models\BaseModel
      */
     public function getPurchases()
     {
-        return $this->hasMany(OrderPurchase::className(), ['order_id' => 'id']);
+        return $this->hasMany(OrderPurchase::className(), ['order_id' => 'id'])->andWhere(['is_active' => 1, 'deleted' => null])->orderBy(['position' => SORT_ASC]);
     }
 
     /**
@@ -186,5 +186,26 @@ class Order extends \app\models\BaseModel
             }
         }
         return $count;
+    }
+
+    public function getPurchaseFieldHtml()
+    {
+        return Yii::$app->controller->renderPartial('//order/_table_purchases_item', [
+            'purchase' => new OrderPurchase(),
+        ]);
+    }
+
+    public function getPurchasesTableList()
+    {
+        return Yii::$app->controller->renderPartial('//order/_table_purchases', [
+            'model' => $this,
+        ]);
+    }
+
+    public function getOrderHeaderHtml()
+    {
+        return Yii::$app->controller->renderPartial('//order/_order_header', [
+            'model' => $this,
+        ]);
     }
 }

@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     ],
                     'name',
-
+                    'is_active:boolean',
                     [
                         'class' => ActionColumn::className(),
                         'urlCreator' => function ($action, ProductCollection $model, $key, $index, $column) {

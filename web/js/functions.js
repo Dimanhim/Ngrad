@@ -80,6 +80,40 @@
         return data;
     }
 
+    function updatePurchasesList(order_id) {
+        $.ajax({
+            url: '/ajax/order-purchases-list',
+            type: 'POST',
+            data: {order_id: order_id},
+            success: function (res) {
+                if(res.error == 0) {
+                    $('.table-order-purchases-o').html(res.data);
+                    initPlugins();
+                }
+            },
+            error: function (e) {
+                console.log('Error!', e);
+            }
+        });
+    }
+
+    function updateOrderHeader(order_id) {
+        $.ajax({
+            url: '/ajax/update-order-header',
+            type: 'POST',
+            data: {order_id: order_id},
+            success: function (res) {
+                if(res.error == 0) {
+                    $('.order-header-o').html(res.data);
+                    initPlugins();
+                }
+            },
+            error: function (e) {
+                console.log('Error!', e);
+            }
+        });
+    }
+
 
 
 
@@ -95,16 +129,10 @@
     }
 
     function displaySuccessMessage(message) {
-        $('.info-message').text(message).fadeIn();
-        setTimeout(function() {
-            $('.info-message').text('').fadeOut();
-        }, 5000)
+        toastr.success(message)
     }
     function displayErrorMessage(message) {
-        $('.info-message').addClass('error').text(message).fadeIn();
-        setTimeout(function() {
-            $('.info-message').text('').fadeOut();
-        }, 5000)
+        toastr.error(message)
     }
 
 
@@ -113,6 +141,12 @@
         $('.chosen').chosen()
         $(".select-time").inputmask({"mask": "99:99"});
         $(".phone-mask").inputmask({"mask": "+7 (999) 999-99-99"});
+        $('.date-picker').datepicker({
+            todayHighlight: true,
+            clearBtn: true,
+            format: 'dd.mm.yyyy',
+            language: 'ru',
+        })
     }
 
 

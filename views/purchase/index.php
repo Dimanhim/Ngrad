@@ -1,20 +1,19 @@
 <?php
 
-use app\models\ProductAttribute;
+use app\models\Purchase;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
 use himiklab\sortablegrid\SortableGridView;
-use app\models\ProductAttributeCategory;
 use app\models\Supplier;
 
 /** @var yii\web\View $this */
-/** @var app\models\ProductAttributeSearch $searchModel */
+/** @var app\models\PurchaseSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="product-attribute-index">
+<div class="purchase-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -28,41 +27,31 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            [
-                'attribute' => 'image_fields',
-                'format' => 'raw',
-                'value' => function($data) {
-                    return $data->mainImageHtml;
-                }
-            ],
-            'name',
-            'alias',
-            [
-                'attribute' => 'category_id',
-                'format' => 'raw',
-                'value' => function($data) {
-                    if($data->category) {
-                        return Html::a($data->category->name, ['product-attribute-category/update', 'id' => $data->category->id]);
-                    }
-                },
-                'filter' => ProductAttributeCategory::getList(),
-            ],
+            'date_purchase',
+            'date_delivery',
+            'supplier_id',
             [
                 'attribute' => 'supplier_id',
                 'format' => 'raw',
                 'value' => function($data) {
-                    if($data->category) {
-                        return Html::a($data->supplier->name, ['supplier/view', 'id' => $data->supplier->id]);
+                    if($data->supplier) {
+                        return Html::a($data->supplier->name, ['supplier/update', 'id' => $data->supplier->id]);
                     }
                 },
                 'filter' => Supplier::getList(),
             ],
-            'begin_qty',
-            'price',
+            'phone',
+            [
+                'attribute' => 'status_id',
+                'format' => 'raw',
+                'value' => function($data) {
+                    return $data->statusName;
+                },
+            ],
             'is_active:boolean',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, ProductAttribute $model, $key, $index, $column) {
+                'urlCreator' => function ($action, Purchase $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],

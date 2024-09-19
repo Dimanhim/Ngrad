@@ -42,6 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'filter' => ProductAttributeCategory::getTypes(),
             ],
+            'is_active:boolean',
             [
                 'class' => ActionColumn::className(),
                 'template' => '{update}',

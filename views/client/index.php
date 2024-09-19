@@ -1,6 +1,6 @@
 <?php
 
-use app\models\ProductAttribute;
+use app\models\Client;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\grid\ActionColumn;
@@ -36,33 +36,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'name',
-            'alias',
-            [
-                'attribute' => 'category_id',
-                'format' => 'raw',
-                'value' => function($data) {
-                    if($data->category) {
-                        return Html::a($data->category->name, ['product-attribute-category/update', 'id' => $data->category->id]);
-                    }
-                },
-                'filter' => ProductAttributeCategory::getList(),
-            ],
-            [
-                'attribute' => 'supplier_id',
-                'format' => 'raw',
-                'value' => function($data) {
-                    if($data->category) {
-                        return Html::a($data->supplier->name, ['supplier/view', 'id' => $data->supplier->id]);
-                    }
-                },
-                'filter' => Supplier::getList(),
-            ],
-            'begin_qty',
-            'price',
+            'phone',
+            'email',
             'is_active:boolean',
             [
                 'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, ProductAttribute $model, $key, $index, $column) {
+                'urlCreator' => function ($action, Client $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }
             ],

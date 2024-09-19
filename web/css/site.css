@@ -151,6 +151,20 @@ a.desc:after {
     border-bottom: 1px solid #000;
 }
 
+.card-view-header {
+    font-weight: bold;
+}
+.card-view-date {
+    border: none;
+    background: transparent;
+}
+.chosen-sm .chosen-container.chosen-container-single {
+    max-width: 100px !important;
+}
+.chosen-md .chosen-container.chosen-container-single {
+    max-width: 300px !important;
+}
+
 
 
 

@@ -2,58 +2,48 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use kartik\widgets\Select2;
+use app\models\Product;
+use app\models\ProductSize;
 
 /** @var yii\web\View $this */
 /** @var app\models\Order $model */
 
-$this->title = $model->id;
+$this->title = 'Заказ №' . $model->id;
 $this->params['breadcrumbs'][] = ['label' => $model->modelName, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="order-view">
+<div class="order-view" data-order="<?= $model->id ?>">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?//= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Вы уверены, что хотите удалить заказ?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+    <div class="container-view">
+        <div class="order-header-o">
+            <?= $this->render('_order_header', [
+                'model' => $model,
+            ]) ?>
+        </div>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'date_order',
-            'date_shipping',
-            [
-                'attribute' => 'client_id',
-                'format' => 'raw',
-                'value' => function($data) {
-                    if($data->client) {
-                        return $data->client->id;
-                    }
-                }
-            ],
-            [
-                'attribute' => 'Состав заказа',
-                'format' => 'raw',
-                'value' => function($data) {
-                    return $data->getPurchasesHtml();
-                }
-            ],
-            'price',
-            'phone',
-            //'status_id',
-            'is_active:boolean',
-            'created_at:datetime',
-        ],
-    ]) ?>
+
+        <div class="card">
+            <div class="card-header">
+                Состав заказа
+            </div>
+            <div class="card-body">
+                <div class="table-order-purchases-o">
+                    <?= $this->render('_table_purchases', [
+                        'model' => $model,
+                    ]) ?>
+                </div>
+
+                <div>
+                    <?= Html::a('Добавить', ['#'], ['class' => 'btn btn-sm btn-success btn-order-purchase-add-o']) ?>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
 
 </div>

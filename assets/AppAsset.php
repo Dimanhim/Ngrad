@@ -38,6 +38,7 @@ class AppAsset extends AssetBundle
             'css/bootstrap-icons.css',
             'css/font-awesome.min.css',
             'css/jquery-ui.min.css',
+            'css/bootstrap-datepicker.min.css',
             'css/chosen.css',
             'css/jquery.fancybox.min.css',
             'css/toastr.min.css',
@@ -54,6 +55,8 @@ class AppAsset extends AssetBundle
         return [
             'js/jquery-ui.min.js',
             'js/bootstrap.min.js',
+            'js/bootstrap-datepicker.min.js',
+            'js/bootstrap-datepicker.ru.min.js',
             'js/chosen.jquery.min.js',
             'js/jquery.fancybox.min.js',
             'js/inputmask.js',

@@ -72,6 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'phone',
+            'is_active:boolean',
             [
                 'class' => ActionColumn::className(),
                 'template' => '{view} {delete}',

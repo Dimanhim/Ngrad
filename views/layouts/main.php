@@ -43,17 +43,18 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
         'options' => ['class' => 'navbar-nav'],
         'items' => [
             ['label' => 'Товары', 'url' => ['/product/index']],
-            ['label' => 'Расходники', 'url' => ['/attribute/index']],
-            ['label' => 'Закупка расходников', 'url' => ['/payment-attribute/index']],
+            ['label' => 'Расходники', 'items' => [
+                ['label' => 'Категории', 'url' => ['/product-attribute-category/index']],
+                ['label' => 'Расходники', 'url' => ['/product-attribute/index']],
+            ]],
+            ['label' => 'Закупка расходников', 'url' => ['/purchase/index']],
             ['label' => 'Заказы товаров', 'url' => ['/order/index']],
             ['label' => 'Справочник', 'items' => [
                 ['label' => 'Размеры', 'url' => ['/product-size/index']],
-                ['label' => 'Модель', 'url' => ['/client/index']],
+                //['label' => 'Модель', 'url' => ['/client/index']],
                 ['label' => 'Поставщики', 'url' => ['/supplier/index']],
                 ['label' => 'Коллекция', 'url' => ['/product-collection/index']],
                 ['label' => 'Заказчики', 'url' => ['/client/index']],
-                ['label' => '--Категории атрибутов', 'url' => ['/product-attribute-category/index']],
-                ['label' => '--Атрибуты', 'url' => ['/product-attribute/index']],
             ]],
             Yii::$app->user->isGuest
                 ? ['label' => 'Вход', 'url' => ['/site/login']]

@@ -4,7 +4,7 @@
 .nav.navbar-nav {
     width: 100%;
 }
-.dropdown.nav-item {
+.dropdown.nav-item:nth-child(5) {
     margin-left: auto;
 }
 .image-preview {
@@ -382,3 +382,12 @@ th.required:after
 }
 /* END ALERT */
 
+#toast-container > div {
+    opacity: 1;
+}
+.toast-success {
+    background-color: #51a351 !important;
+}
+.toast-error {
+    background-color:#BD362F !important;
+}
