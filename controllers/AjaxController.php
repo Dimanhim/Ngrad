@@ -8,6 +8,8 @@ use app\models\Product;
 use app\models\ProductAttribute;
 use app\models\ProductAttributeCategory;
 use app\models\ProductSize;
+use app\models\Purchase;
+use app\models\PurchaseProductAttribute;
 use Yii;
 use yii\filters\ContentNegotiator;
 use yii\web\Controller;
@@ -98,6 +100,43 @@ class AjaxController extends Controller
         return $this->response();
     }
 
+    public function actionCalculatePurchase()
+    {
+        $totalPrice = 0;
+        $data = Yii::$app->request->post('data');
+
+        \Yii::$app->infoLog->add('data', $data);
+
+        if(!$data) {
+            return false;
+        }
+
+        foreach($data as $items) {
+            $category = ProductAttributeCategory::findOne($items['category_id']);
+            $attribute = ProductAttribute::findOne($items['attribute_id']);
+            if($attribute and $items['val']) {
+                $totalPrice += $attribute->price * $items['val'];
+            }
+        }
+
+        return $this->response($totalPrice);
+
+
+
+
+        /*foreach($data as $values) {
+            if($product = Product::findOne($values['product_id'])) {
+                $cost = $product->fullCost;
+                if($values['count']) {
+                    $totalPrice += $cost * $values['count'];
+                }
+            }
+        }
+        $this->addData([$totalPrice]);*/
+
+        return $this->response();
+    }
+
     /**
      * @return mixed
      * @throws \yii\db\Exception
@@ -136,11 +175,44 @@ class AjaxController extends Controller
         return $this->response();
     }
 
+    public function actionAddPaPurchaseField()
+    {
+        $purchase_id = Yii::$app->request->post('purchase_id');
+
+        if($purchase = Purchase::findOne($purchase_id)) {
+            $html = $purchase->getPurchaseFieldHtml();
+            if($html) {
+                return $this->response($html);
+            }
+        }
+
+        $this->_addError('Не удалось найти закупку');
+
+        return $this->response();
+    }
+
     public function actionDeleteOrderPurchase()
     {
         $purchase_id = Yii::$app->request->post('purchase_id');
 
         if($purchase = OrderPurchase::findOne($purchase_id)) {
+            if($purchase->delete()) {
+                return $this->response();
+            }
+            $this->_addError('Ошибка удаления поля');
+            return $this->response();
+        }
+
+        $this->_addError('Не удалось найти заказ');
+
+        return $this->response();
+    }
+
+    public function actionDeletePaPurchase()
+    {
+        $pa_id = Yii::$app->request->post('pa_id');
+
+        if($purchase = PurchaseProductAttribute::findOne($pa_id)) {
             if($purchase->delete()) {
                 return $this->response();
             }
@@ -170,12 +242,46 @@ class AjaxController extends Controller
         return $this->response();
     }
 
+    public function actionPaPurchasesList()
+    {
+        $purchase_id = Yii::$app->request->post('purchase_id');
+
+        if($purchase = Purchase::findOne($purchase_id)) {
+            if($html = $purchase->getPaTableList()) {
+                return $this->response($html);
+            }
+            $this->_addError('Ошибка обновления');
+            return $this->response();
+        }
+
+        $this->_addError('Не удалось найти закупку');
+
+        return $this->response();
+    }
+
     public function actionUpdateOrderHeader()
     {
         $order_id = Yii::$app->request->post('order_id');
 
         if($order = Order::findOne($order_id)) {
             if($html = $order->getOrderHeaderHtml()) {
+                return $this->response($html);
+            }
+            $this->_addError('Ошибка обновления');
+            return $this->response();
+        }
+
+        $this->_addError('Не удалось найти заказ');
+
+        return $this->response();
+    }
+
+    public function actionUpdatePaHeader()
+    {
+        $purchase_id = Yii::$app->request->post('purchase_id');
+
+        if($purchase = Purchase::findOne($purchase_id)) {
+            if($html = $purchase->getPurchaseHeaderHtml()) {
                 return $this->response($html);
             }
             $this->_addError('Ошибка обновления');
@@ -209,6 +315,28 @@ class AjaxController extends Controller
         }
 
         $this->_addError('Не удалось обновить заказ');
+
+        return $this->response();
+    }
+
+    public function actionChangePaField()
+    {
+        $purchase_id = Yii::$app->request->post('purchase_id');
+        $pa_id = Yii::$app->request->post('pa_id');
+        $product_attribute_id = Yii::$app->request->post('product_attribute_id');
+        $qty = Yii::$app->request->post('qty');
+
+        if(!$model = PurchaseProductAttribute::findOne($pa_id)) {
+            $model = new PurchaseProductAttribute();
+            $model->purchase_id = $purchase_id;
+        }
+        $model->product_attribute_id = $product_attribute_id;
+        $model->qty = $qty;
+        if($model->save()) {
+            return $this->response('Закупка успешно обновлена');
+        }
+
+        $this->_addError('Не удалось обновить закупку');
 
         return $this->response();
     }

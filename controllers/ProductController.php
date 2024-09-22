@@ -122,6 +122,10 @@ class ProductController extends BaseController
         ]);
     }
 
+    /**
+     * @return \yii\web\Response
+     * @throws \yii\db\Exception
+     */
     public function actionCreateOrder()
     {
         $model = new OrderForm();

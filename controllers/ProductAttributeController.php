@@ -3,10 +3,14 @@
 namespace app\controllers;
 
 use app\models\ProductAttribute;
+use app\models\ProductAttributeCategorySearch;
 use app\models\ProductAttributeSearch;
+use app\models\Purchase;
+use app\models\Supplier;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\PurchaseForm;
 
 /**
  * ProductAttributeController implements the CRUD actions for ProductAttribute model.
@@ -33,7 +37,7 @@ class ProductAttributeController extends BaseController
      */
     public function actionIndex()
     {
-        $searchModel = new ProductAttributeSearch();
+        $searchModel = new ProductAttributeCategorySearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
 
         return $this->render('index', [
@@ -60,9 +64,9 @@ class ProductAttributeController extends BaseController
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return string|\yii\web\Response
      */
-    public function actionCreate()
+    public function actionCreate($category_id = null)
     {
-        $model = new ProductAttribute();
+        $model = new ProductAttribute(['category_id' => $category_id]);
 
         if ($this->request->isPost) {
             if ($model->load($this->request->post()) && $model->save()) {
@@ -95,5 +99,23 @@ class ProductAttributeController extends BaseController
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    public function actionCreatePurchase()
+    {
+        $model = new PurchaseForm();
+        if($model->load(\Yii::$app->request->post())) {
+            if($model->validate()) {
+                $purchase = new Purchase();
+                $purchase->_purchases = json_decode($model->data, true);
+                $purchase->supplier_id = $model->supplier_id;
+                $purchase->date_purchase = date('d.m.Y H:i:s');
+
+                if($purchase->save()) {
+                    return $this->redirect(['purchase/view', 'id' => $purchase->id]);
+                }
+            }
+            return $this->redirect(['index']);
+        }
     }
 }

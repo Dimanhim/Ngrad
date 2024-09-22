@@ -71,7 +71,7 @@ $totalCost = [];
         <?php endif; ?>
         <?php endforeach; ?>
 
-        <td><?= $model->getActionButtons('view') ?></td>
+        <td><?= $model->getActionButtons('view','product', null, true) ?></td>
         <td class="product-size product-size-o"><?= $sizes[0] ?? null ?></td>
         <td class="product-count-o">
             <?= Html::dropDownList('product-count', null, $productCount ,['prompt' => '', 'class' => 'form-control form-control-sm']) ?>
@@ -109,7 +109,7 @@ $totalCost = [];
                 elseif($i == 2) $action = 'delete';
                 else $action = null;
             ?>
-            <td><?= $model->getActionButtons($action) ?></td>
+            <td><?= $model->getActionButtons($action, 'product', null, true) ?></td>
             <td class="product-size product-size-o"><?= $sizes[$i] ?? null ?></td>
             <td class="product-count-o">
                 <?= Html::dropDownList('product-count', null, $productCount ,['prompt' => '', 'class' => 'form-control form-control-sm']) ?>

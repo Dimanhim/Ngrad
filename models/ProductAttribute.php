@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "product_attributes".
@@ -117,5 +118,25 @@ class ProductAttribute extends \app\models\BaseModel
         return $this->hasMany(Purchase::className(), ['id' => 'purchase_id'])
             ->viaTable('purchase_product_attributes', ['product_attribute_id' => 'id'])
             ->andWhere(['purchases.is_active' => 1])->andWhere(['not', ['purchases.deleted' => null]])->orderBy(['purchases.position' => SORT_ASC]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPriceText()
+    {
+        return $this->price . ' ' . ($this->category->getShortTypeText(true) ?? null);
+    }
+
+    /**
+     * @return array
+     */
+    public static function getList($categoryId = null)
+    {
+        if($categoryId) {
+            return ArrayHelper::map(self::findModels()->andWhere(['category_id' => $categoryId])->andWhere(['not', ['name' => null]])->asArray()->all(), 'id', 'name');
+        }
+
+        return ArrayHelper::map(self::findModels()->andWhere(['not', ['name' => null]])->asArray()->all(), 'id', 'name');
     }
 }

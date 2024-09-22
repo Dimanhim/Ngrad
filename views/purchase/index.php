@@ -29,7 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'date_purchase',
             'date_delivery',
-            'supplier_id',
             [
                 'attribute' => 'supplier_id',
                 'format' => 'raw',

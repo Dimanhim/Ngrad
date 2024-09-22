@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->modelName, 'url' => ['index
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
 ?>
-<div class="order-view" data-order="<?= $model->id ?>">
+<div class="order-view order-view-o" data-order="<?= $model->id ?>">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

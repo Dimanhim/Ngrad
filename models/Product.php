@@ -193,30 +193,6 @@ class Product extends \app\models\BaseModel
         return $data;
     }
 
-    /**
-     * @return string
-     */
-    public function getActionButtons($action = null)
-    {
-        if(!$action) return false;
-
-        $str = '';
-
-        if($action == 'view') {
-            $str .= Html::a('<i class="bi bi-eye"></i>', ['product/view', 'id' => $this->id], ['class' => 'btn btn-xs btn-success']);
-        }
-        if($action == 'update') {
-            $str .= Html::a('<i class="bi bi-pencil"></i>', ['product/update', 'id' => $this->id], ['class' => 'btn btn-xs btn-primary']);
-        }
-        if($action == 'delete') {
-            $str .= Html::a('<i class="bi bi-trash"></i>', ['product/delete', 'id' => $this->id], ['class' => 'btn btn-xs btn-danger']);
-        }
-
-        return $str;
-    }
-
-
-
     /*public function getAttributes()
     {
         return $this->hasMany()

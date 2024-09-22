@@ -7,6 +7,8 @@ use yii\grid\ActionColumn;
 use himiklab\sortablegrid\SortableGridView;
 use app\models\ProductAttributeCategory;
 use app\models\Supplier;
+use yii\widgets\ListView;
+use app\models\PurchaseForm;
 
 /** @var yii\web\View $this */
 /** @var app\models\ProductAttributeSearch $searchModel */
@@ -18,56 +20,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Добавить', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?= $this->render('_purchase_form', [
+        'attribute' => new ProductAttribute(),
+        'model' => new PurchaseForm(),
+    ]) ?>
 
-    <?= SortableGridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
-            [
-                'attribute' => 'image_fields',
-                'format' => 'raw',
-                'value' => function($data) {
-                    return $data->mainImageHtml;
-                }
-            ],
-            'name',
-            'alias',
-            [
-                'attribute' => 'category_id',
-                'format' => 'raw',
-                'value' => function($data) {
-                    if($data->category) {
-                        return Html::a($data->category->name, ['product-attribute-category/update', 'id' => $data->category->id]);
-                    }
-                },
-                'filter' => ProductAttributeCategory::getList(),
-            ],
-            [
-                'attribute' => 'supplier_id',
-                'format' => 'raw',
-                'value' => function($data) {
-                    if($data->category) {
-                        return Html::a($data->supplier->name, ['supplier/view', 'id' => $data->supplier->id]);
-                    }
-                },
-                'filter' => Supplier::getList(),
-            ],
-            'begin_qty',
-            'price',
-            'is_active:boolean',
-            [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, ProductAttribute $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
-            ],
-        ],
+    <?= ListView::widget([
+        'dataProvider' => $searchModel->search(Yii::$app->request->queryParams),
+        'emptyText' => false,
+        'layout' => "{items}\n{pager}",
+        'options' => ['class' => 'product-list'],
+        'itemOptions' => ['tag' => false],
+        'itemView' => '//product-attribute/_item_attribute',
     ]); ?>
-
 
 </div>

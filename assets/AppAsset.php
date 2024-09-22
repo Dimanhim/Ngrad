@@ -64,6 +64,9 @@ class AppAsset extends AssetBundle
             'js/toastr.min.js',
             'js/functions.js?v='.mt_rand(1000,10000),
             'js/common.js?v='.mt_rand(1000,10000),
+            'js/modules/order.js?v='.mt_rand(1000,10000),
+            'js/modules/product.js?v='.mt_rand(1000,10000),
+            'js/modules/purchase.js?v='.mt_rand(1000,10000),
         ];
     }
 }

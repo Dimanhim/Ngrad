@@ -164,6 +164,9 @@ a.desc:after {
 .chosen-md .chosen-container.chosen-container-single {
     max-width: 300px !important;
 }
+.attribute-actions {
+    /*min-width: 170px;*/
+}
 
 
 

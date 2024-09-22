@@ -423,6 +423,65 @@ class BaseModel extends ActiveRecord
         return $this->update(false);
     }
 
+    /**
+     * @return string
+     */
+    public function getActionButtons($action = null, $controllerName = 'product', $model = null, $small = false)
+    {
+        if(!$action) return false;
+
+        if(!$model) {
+            $model = $this;
+        }
+
+        $smallClass = $small ? 'btn-sm' : '';
+
+        $str = '';
+
+        if($action == 'view') {
+            $str .= Html::a('<i class="bi bi-eye"></i>', [$controllerName.'/view', 'id' => $model->id], ['class' => "btn {$smallClass} btn-success"]);
+        }
+        if($action == 'update') {
+            $str .= Html::a('<i class="bi bi-pencil"></i>', [$controllerName.'/update', 'id' => $model->id], ['class' => "btn {$smallClass} btn-primary"]);
+        }
+        if($action == 'delete') {
+            $str .= Html::a('<i class="bi bi-trash"></i>', [$controllerName.'/delete', 'id' => $model->id], ['class' => "btn {$smallClass} btn-danger"]);
+        }
+
+        return $str;
+    }
+
+    /**
+     * @param array $template
+     * @param null $controllerName
+     * @return bool|string
+     */
+    public function getActionButtonsList($template = [], $controllerName = null, $model = null, $small = false)
+    {
+        if(!$controllerName) return false;
+        if(!$model) $model = $this;
+
+        $str = '';
+
+        if(!$template) {
+            $str .= $this->getActionButtons('view', $controllerName, $model, $small) . ' ';
+            $str .= $this->getActionButtons('update', $controllerName, $model, $small) . ' ';
+            $str .= $this->getActionButtons('delete', $controllerName, $model, $small);
+            return $str;
+        }
+
+        if(in_array('view', $template)) {
+            $str .= $this->getActionButtons('view', $controllerName, $model, $small) . ' ';
+        }
+        if(in_array('update', $template)) {
+            $str .= $this->getActionButtons('update', $controllerName, $model, $small) . ' ';
+        }
+        if(in_array('delete', $template)) {
+            $str .= $this->getActionButtons('delete', $controllerName, $model, $small);
+        }
+        return $str;
+    }
+
 
 
 

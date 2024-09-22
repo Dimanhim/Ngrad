@@ -3,6 +3,7 @@
 namespace app\models;
 
 use app\components\Helpers;
+use app\models\traits\PurchaseTrait;
 use Yii;
 
 /**
@@ -23,8 +24,14 @@ use Yii;
  */
 class Purchase extends \app\models\BaseModel
 {
+    use PurchaseTrait;
+
     const STATUS_WAITING = 1;
     const STATUS_TAKE    = 2;
+
+    public $_purchases;
+    public $_price = 0;
+
     /**
      * {@inheritdoc}
      */
@@ -56,7 +63,7 @@ class Purchase extends \app\models\BaseModel
     {
         return array_merge(parent::rules(), [
             [['supplier_id', 'status_id'], 'integer'],
-            [['date_purchase', 'date_delivery'], 'safe'],
+            [['date_purchase', 'date_delivery', '_purchases', '_price'], 'safe'],
             [['phone'], 'string', 'max' => 255],
         ]);
     }
@@ -68,7 +75,7 @@ class Purchase extends \app\models\BaseModel
     {
         return array_merge(parent::attributeLabels(), [
             'date_purchase' => 'Дата закупки',
-            'date_delivery' => 'Дата отгрузки',
+            'date_delivery' => 'Дата поставки',
             'supplier_id' => 'Поставщик',
             'phone' => 'Номер телефона',
             'status_id' => 'Статус',
@@ -86,6 +93,10 @@ class Purchase extends \app\models\BaseModel
         if($this->date_delivery) {
             $this->date_delivery = date('d.m.Y', $this->date_delivery);
         }
+
+        $this->setProductAttributes();
+        $this->setPrice();
+
         return parent::afterFind();
     }
 
@@ -108,6 +119,34 @@ class Purchase extends \app\models\BaseModel
     }
 
     /**
+     * @param $insert
+     * @param $changedAttributes
+     * @throws \yii\db\Exception
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        $this->handleProductAttributes();
+
+        return parent::afterSave($insert, $changedAttributes);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getProductAttributes()
+    {
+        return $this->hasMany(PurchaseProductAttribute::className(), ['purchase_id' => 'id'])->andWhere(['is_active' => 1, 'deleted' => null])->orderBy(['position' => SORT_ASC]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSupplier()
+    {
+        return $this->hasOne(Supplier::className(), ['id' => 'supplier_id']);
+    }
+
+    /**
      * @return array
      */
     public static function getStatusesList()
@@ -125,5 +164,51 @@ class Purchase extends \app\models\BaseModel
     {
         $statuses = self::getStatusesList();
         return $statuses[$this->status_id] ?? null;
+    }
+
+    public function getFormatPrice()
+    {
+        if(!$this->_price) return false;
+
+        return number_format($this->_price, 0, '', ' ') . ' р.';
+    }
+
+    /**
+     * @return int
+     */
+    public function getCountProducts()
+    {
+        $count = 0;
+
+        if($productAttributes = $this->productAttributes) {
+            foreach($productAttributes as $productAttribute) {
+                $count += $productAttribute->qty;
+            }
+        }
+        return $count;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPurchaseFieldHtml()
+    {
+        return Yii::$app->controller->renderPartial('//purchase/_table_purchases_item', [
+            'attribute' => new PurchaseProductAttribute(),
+        ]);
+    }
+
+    public function getPurchaseHeaderHtml()
+    {
+        return Yii::$app->controller->renderPartial('//purchase/_purchase_header', [
+            'model' => $this,
+        ]);
+    }
+
+    public function getPaTableList()
+    {
+        return Yii::$app->controller->renderPartial('//purchase/_table_purchases', [
+            'model' => $this,
+        ]);
     }
 }
