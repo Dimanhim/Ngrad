@@ -50,6 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'is_active:boolean',
             [
                 'class' => ActionColumn::className(),
+                'template' => '{view} {delete}',
                 'urlCreator' => function ($action, Purchase $model, $key, $index, $column) {
                     return Url::toRoute([$action, 'id' => $model->id]);
                  }

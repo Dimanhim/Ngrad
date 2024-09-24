@@ -20,7 +20,7 @@
                         Дата поставки
                     </div>
                     <div class="card-view-body">
-                        <input type="text" class="card-view-date card-view-date-o date-picker" data-purchase="<?= $model->id ?>" value="<?= $model->date_delilery ?? '01.01.2024' ?>">
+                        <input type="text" class="card-view-date card-purchase-date-o date-picker" data-purchase="<?= $model->id ?>" value="<?= $model->date_delivery ?? 'Не указана' ?>">
                     </div>
                 </div>
             </div>

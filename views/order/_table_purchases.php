@@ -18,6 +18,7 @@ use yii\helpers\Html;
         <?php foreach($purchases as $purchase) : ?>
             <?= $this->render('_table_purchases_item', [
                 'purchase' => $purchase,
+                'model' => $model,
             ]) ?>
         <?php endforeach; ?>
     <?php else : ?>

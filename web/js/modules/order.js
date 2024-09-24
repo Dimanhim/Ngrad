@@ -6,6 +6,9 @@ $(document).ready(function() {
      * */
     $(document).on('change', '.card-view-date-o', function(e) {
         e.preventDefault();
+
+        if(!confirm('Вы уверены, что хотите установить дату сдачи заказа?')) return false;
+
         let order_id = $(this).attr('data-order');
         let value = $(this).val();
 

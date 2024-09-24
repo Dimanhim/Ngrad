@@ -26,6 +26,40 @@ $(document).ready(function() {
     });
 
 
+    /**
+     * Устанавливает дату поставки
+     * */
+    $(document).on('change', '.card-purchase-date-o', function(e) {
+        e.preventDefault();
+        if(!confirm('Вы уверены, что хотите установить дату поставки?')) return false;
+
+        let purchase_id = $(this).attr('data-purchase');
+        let value = $(this).val();
+
+        $.ajax({
+            url: '/ajax/change-purchase-date-delivery',
+            type: 'POST',
+            data: {purchase_id: purchase_id, date: value},
+            success: function (res) {
+                console.log(res)
+                if(res.error == 0) {
+                    displaySuccessMessage('Дата закупки успешно обновлена, значения на складе обновлены');
+                    updatePaList(purchase_id);
+                }
+                else {
+                    if(res.message.length) {
+                        displayErrorMessage(res.message)
+                    }
+                    else {
+                        displayErrorMessage('Произошла ошибка обновления даты')
+                    }
+                }
+            },
+            error: function (e) {
+                console.log('Error!', e);
+            }
+        });
+    });
 
     /**
      * РЕДАКТИРОВАНИЕ - ТАБЛИЦА

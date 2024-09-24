@@ -160,12 +160,18 @@ a.desc:after {
 }
 .chosen-sm .chosen-container.chosen-container-single {
     max-width: 100px !important;
+    width: 100px !important;
 }
 .chosen-md .chosen-container.chosen-container-single {
     max-width: 300px !important;
+    width: 300px !important;
 }
 .attribute-actions {
     /*min-width: 170px;*/
+}
+.card-view-date {
+    cursor: pointer;
+    width: 100%;
 }
 
 

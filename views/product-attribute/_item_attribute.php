@@ -24,8 +24,8 @@ use yii\helpers\Html;
                     <td><?= $attribute->name ?></td>
                     <td><?= $attribute->alias ?></td>
                     <td><?= $attribute->price ?></td>
-                    <td></td>
-                    <td></td>
+                    <td><?= $attribute->stockValue ?></td>
+                    <td><?= $attribute->waitValue ?></td>
                     <td class="attribute-actions">
                         <?= $model->getActionButtonsList(['view', 'update'], 'product-attribute', $attribute, true) ?>
                     </td>

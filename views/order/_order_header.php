@@ -20,7 +20,7 @@
                         Дата сдачи
                     </div>
                     <div class="card-view-body">
-                        <input type="text" class="card-view-date card-view-date-o date-picker" data-order="<?= $model->id ?>" value="<?= $model->date_shipping ?? '01.01.2024' ?>">
+                        <input type="text" class="card-view-date card-view-date-o date-picker" data-order="<?= $model->id ?>" value="<?= $model->date_shipping ?? '' ?>">
                     </div>
                 </div>
             </div>

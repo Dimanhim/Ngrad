@@ -115,6 +115,7 @@ class Purchase extends \app\models\BaseModel
         if($this->phone) {
             $this->phone = Helpers::phoneFormat($this->phone);
         }
+
         return parent::beforeSave($insert);
     }
 
@@ -126,6 +127,8 @@ class Purchase extends \app\models\BaseModel
     public function afterSave($insert, $changedAttributes)
     {
         $this->handleProductAttributes();
+
+        $this->setAttributesToStock();
 
         return parent::afterSave($insert, $changedAttributes);
     }

@@ -159,6 +159,37 @@ class AjaxController extends Controller
         return $this->response();
     }
 
+    /**
+     * @return mixed
+     * @throws \yii\db\Exception
+     */
+    public function actionChangePurchaseDateDelivery()
+    {
+        $purchase_id = Yii::$app->request->post('purchase_id');
+        $date = Yii::$app->request->post('date');
+        if($date and ($purchase = Purchase::findOne($purchase_id))) {
+
+            if($date <= $purchase->date_purchase) {
+                $this->_addError('Дата поставки не может быть меньше даты закупки');
+                return $this->response();
+            }
+            $deliveryBegin = $purchase->date_delivery;
+            $purchase->date_delivery = $date;
+            if(!$deliveryBegin) {
+                $purchase->status_id = Purchase::STATUS_TAKE;
+            }
+            if(!$purchase->save()) {
+                $this->_addError('Произошла ошибка обновления даты, пожалуйста, попробуйте позднее');
+            }
+            return $this->response();
+        }
+        else {
+            $this->_addError('Произошла неизвестная ошибка, пожалуйста, попробуйте позднее');
+        }
+
+        return $this->response();
+    }
+
     public function actionAddOrderPurchaseField()
     {
         $order_id = Yii::$app->request->post('order_id');
