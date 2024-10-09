@@ -52,13 +52,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'begin_qty',
             'price',
             'is_active:boolean',
-            [
+            /*[
                 'attribute' => 'image_fields',
                 'format' => 'raw',
                 'value' => function($data) {
                     return $data->imagesHtml;
                 }
-            ],
+            ],*/
             'created_at:datetime',
         ],
     ]) ?>

@@ -45,7 +45,7 @@ use app\models\ProductAttributeCategory;
                 </div>
             </div>
             <div class="col-md-6">
-                <?= $model->getImagesField($form) ?>
+                <?//= $model->getImagesField($form) ?>
             </div>
         </div>
     <div class="form-group">

@@ -8,7 +8,7 @@ use yii\helpers\Html;
     <h3><?= $model->name ?></h3>
     <table class="table table-bordered purchase-id-o" data-id="<?= $model->id ?>">
         <tr>
-            <th>Фото</th>
+            <th>Поставщик</th>
             <th>Название</th>
             <th>Артикул</th>
             <th>Стоимость <?= $model->getShortTypeText(true) ?></th>
@@ -20,7 +20,7 @@ use yii\helpers\Html;
         <?php if($attributes = $model->productAttributes) : ?>
             <?php foreach($attributes as $attribute) : ?>
                 <tr class="attributes-list-o">
-                    <td><?= $attribute->mainImageHtml ?></td>
+                    <td><?= $attribute->supplier ? Html::a($attribute->supplier->name, ['supplier/view', 'id' => $attribute->supplier->id]): null ?></td>
                     <td><?= $attribute->name ?></td>
                     <td><?= $attribute->alias ?></td>
                     <td><?= $attribute->price ?></td>
