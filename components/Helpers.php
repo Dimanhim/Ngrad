@@ -61,4 +61,13 @@ class Helpers
         ];
     }
 
+    /**
+     * @param $value
+     * @return mixed
+     */
+    public static function prepareFloat($value)
+    {
+        return str_replace(',', '.', $value);
+    }
+
 }

@@ -22,7 +22,7 @@
     function initPlugins() {
         $('.chosen').chosen()
         $(".select-time").inputmask({"mask": "99:99"});
-        $(".phone-mask").inputmask({"mask": "+7 (999) 999-99-99"});
+        $(".phone-mask").inputmask({"mask": "+9 (999) 999-99-99"});
         $('.date-picker').datepicker({
             todayHighlight: true,
             clearBtn: true,

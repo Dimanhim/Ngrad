@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\Helpers;
 use app\models\Order;
 use app\models\OrderPurchase;
 use app\models\Product;
@@ -10,6 +11,7 @@ use app\models\ProductAttributeCategory;
 use app\models\ProductSize;
 use app\models\Purchase;
 use app\models\PurchaseProductAttribute;
+use PHPUnit\TextUI\Help;
 use Yii;
 use yii\filters\ContentNegotiator;
 use yii\web\Controller;
@@ -64,7 +66,7 @@ class AjaxController extends Controller
             foreach($data as $values) {
                 if($attribute = ProductAttribute::findOne($values['attribute_id'])) {
                     if($values['qty']) {
-                        $totalPrice += $attribute->price * $values['qty'];
+                        $totalPrice += $attribute->price * Helpers::prepareFloat($values['qty']);
                     }
                 }
             }

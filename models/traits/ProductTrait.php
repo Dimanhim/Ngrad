@@ -2,6 +2,7 @@
 
 namespace app\models\traits;
 
+use app\components\Helpers;
 use app\models\ProductAttributeCategory;
 use app\models\ProductAttributesRelation;
 use app\models\ProductCollection;
@@ -29,7 +30,7 @@ trait ProductTrait
                     $model = new ProductAttributesRelation();
                     $model->product_id = $this->id;
                     $model->product_attribute_id = $attributeId;
-                    $model->qty = $this->_cat_fields['values'][$key];
+                    $model->qty = Helpers::prepareFloat($this->_cat_fields['values'][$key]);
                     $model->save();
                 }
             }
