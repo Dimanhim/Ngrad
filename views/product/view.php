@@ -25,11 +25,12 @@ $totalPrice = 0;
                         <div class="form-group">
                             <?= $model->getMainImageHtml(300, 300) ?>
                         </div>
-                        <!--
+
                         <div class="form-group">
                             <b>Коллекция</b><br>
-                            <p><?//= $model->collection->name ?? '---' ?></p>
+                            <p><?= $model->collection->name ?? '---' ?></p>
                         </div>
+                        <!--
                         <div class="form-group">
                             <b>Модель</b><br>
                             <p><?//= $model->model_name ?? '---' ?></p>

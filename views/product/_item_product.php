@@ -11,8 +11,14 @@ $attributes = $model->productRelations;
 $sizes = ProductSize::getListKeys();
 $productCount = Product::getPurchasesCount();
 
+$rowspans = [];
 
-if(count($attributes) > count($sizes) and count($attributes) >= 3) {
+foreach($categories as $category) {
+    $rowspans[$category->id] = $model->getRowspan($category);
+}
+$rowspan = max($rowspans);
+
+/*if(count($attributes) > count($sizes) and count($attributes) >= 3) {
     $rowspan = count($attributes);
 }
 elseif(count($attributes) <= count($sizes) and count($sizes) >= 3) {
@@ -20,9 +26,16 @@ elseif(count($attributes) <= count($sizes) and count($sizes) >= 3) {
 }
 else {
     $rowspan = 3;
+}*/
+/*if(count($attributes) > count($sizes) and count($attributes) >= 3) {
+    $rowspan = count($attributes);
 }
+else {
+    $rowspan = 3;
+}*/
 
 $totalCost = [];
+$totalProductCost = 0;
 
 
 // отдельно заполняем 1-ю строчку
@@ -32,11 +45,10 @@ $totalCost = [];
 <table class="table table-bordered product-id-o" data-id="<?= $model->id ?>">
     <tr>
         <th><?= $model->name ?></th>
-        <th colspan="<?= $colspan ?>">Ткани</th>
-        <th colspan="<?= $colspan ?>">Второй слой</th>
-        <th colspan="<?= $colspan ?>">Фурнитура</th>
-        <th colspan="<?= $colspan ?>">Глиттер</th>
-        <th colspan="<?= $colspan ?>">Кружево</th>
+
+        <?php foreach($categories as $category) : ?>
+            <th colspan="<?= $colspan ?>"><?= $category->name ?></th>
+        <?php endforeach; ?>
         <th>Д</th>
         <th>Размер</th>
         <th>Кол-во</th>
@@ -48,12 +60,7 @@ $totalCost = [];
 
         <?php foreach ($categories as $category) : ?>
             <?php
-                if(
-                    $relations = $category->getProductRelations($model) and
-                    isset($relations[0]) and
-                    ($relation = $relations[0]) and
-                    ($attribute = $relation->productAttribute)
-                )
+                if($relation = $model->getProductRelation($category))
                 :
                     if(isset($totalCost[$category->id])) {
                         $totalCost[$category->id] += $relation->qty * $relation->productAttribute->price;
@@ -82,12 +89,7 @@ $totalCost = [];
         <tr>
             <?php foreach ($categories as $category) : ?>
             <?php
-                if(
-                    $relations = $category->getProductRelations($model) and
-                    isset($relations[0]) and
-                    ($relation = $relations[$i]) and
-                    ($attribute = $relation->productAttribute)
-                )
+                if($relation = $model->getProductRelation($category, $i))
                 :
                     if(isset($totalCost[$category->id])) {
                         $totalCost[$category->id] += $relation->qty * $relation->productAttribute->price;
@@ -117,7 +119,10 @@ $totalCost = [];
         </tr>
     <?php endfor; ?>
     <tr>
-        <th>ИТОГО</th>
+        <th>
+            ИТОГО<br>
+            <?= Product::getTotalCostFromAttributes($totalCost) ?>
+        </th>
         <?php foreach ($categories as $category) : ?>
             <th colspan="3"><p class="total-th"><?= round($totalCost[$category->id])  ?></p></th>
         <?php endforeach; ?>

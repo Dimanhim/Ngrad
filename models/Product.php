@@ -193,6 +193,23 @@ class Product extends \app\models\BaseModel
         return $data;
     }
 
+    /**
+     * @param array $totalCost
+     * @return float|int|mixed
+     */
+    public static function getTotalCostFromAttributes(array $totalCost = [])
+    {
+        $cost = 0;
+
+        if(!$totalCost) return $cost;
+
+        foreach($totalCost as $attributeCost) {
+            $cost += $attributeCost;
+        }
+
+        return round($cost) . ' руб.';
+    }
+
     /*public function getAttributes()
     {
         return $this->hasMany()
@@ -207,4 +224,53 @@ class Product extends \app\models\BaseModel
     {
         return $this->hasOne()
     }*/
+
+    public function isColFilled()
+    {
+        return true;
+    }
+
+    public function categoriesFill($category)
+    {
+
+    }
+
+    /**
+     * @param $category
+     * @param int $i
+     * @return bool
+     */
+    public function getProductRelation($category, $i = 0)
+    {
+        if(
+            $relations = $category->getProductRelations($this) and
+            isset($relations[0]) and
+            ($relation = $relations[$i])
+        )
+        {
+            return $relation;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $category
+     * @return int
+     * @throws \yii\db\Exception
+     */
+    public function getRowspan($category)
+    {
+        $sql = '
+        SELECT COUNT(par.id) AS rowspan FROM product_attributes_relations AS par
+            LEFT JOIN products AS p ON p.id = par.product_id
+            LEFT JOIN product_attributes AS pa ON pa.id = par.product_attribute_id
+            LEFT JOIN product_attribute_categories AS pac ON pac.id = pa.category_id
+            WHERE p.id = ' . $this->id . ' AND pac.id = ' . $category->id;
+        $query = Yii::$app->db->createCommand($sql)->queryAll();
+
+        if(isset($query[0]['rowspan']) and $query[0]['rowspan'] > 3) return $query[0]['rowspan'];
+
+        return 3;
+    }
 }
