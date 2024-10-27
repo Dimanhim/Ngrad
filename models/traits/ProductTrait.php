@@ -115,6 +115,18 @@ trait ProductTrait
         return $data;
     }
 
+    /**
+     *
+     */
+    public function setProductRelations()
+    {
+        if($this->productRelations) {
+            foreach($this->productRelations as $relation) {
+                $this->_relations[] = $relation;
+            }
+        }
+    }
+
     public function setCostValues()
     {
 

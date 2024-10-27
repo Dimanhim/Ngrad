@@ -146,6 +146,7 @@ class ProductController extends BaseController
                 $order->setPrice();
 
                 if($order->save()) {
+                    $order->setPurchasesToStock();
                     return $this->redirect(['order/view', 'id' => $order->id]);
                 }
             }

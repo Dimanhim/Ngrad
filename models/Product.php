@@ -27,6 +27,7 @@ class Product extends \app\models\BaseModel
     public $_categories = [];
     public $_cat_fields = ['attributes', 'values'];
     //public $_cost_values = [];
+    public $_relations;
 
     public $maxAttributeCount = null;
 
@@ -62,7 +63,7 @@ class Product extends \app\models\BaseModel
         return array_merge(parent::rules(), [
             [['collection_id'], 'integer'],
             [['name', 'model_name'], 'string', 'max' => 255],
-            [['_categories', '_cat_fields'], 'safe'],
+            [['_categories', '_cat_fields', '_relations'], 'safe'],
         ]);
     }
 
@@ -89,6 +90,7 @@ class Product extends \app\models\BaseModel
      */
     public function afterFind()
     {
+        $this->setProductRelations();
         return parent::afterFind();
     }
 

@@ -5,6 +5,7 @@ namespace app\models\traits;
 use app\models\OrderPurchase;
 use app\models\Product;
 use app\models\ProductSize;
+use app\models\Stock;
 
 trait OrderTrait
 {
@@ -54,6 +55,30 @@ trait OrderTrait
                     $model->size_id = $size->id;
                     $model->qty = $qty;
                     $model->save();
+                }
+            }
+        }
+    }
+
+    /**
+     * @throws \yii\db\Exception
+     */
+    public function setPurchasesToStock()
+    {
+        if($this->_purchases) {
+            foreach($this->_purchases as $orderPurchase) {
+                if($product = Product::findOne($orderPurchase['product_id'])) {
+                    if($product->_relations) {
+                        foreach($product->_relations as $relation) {
+                            if(!$stock = Stock::findOne(['product_attribute_id' => $relation->product_attribute_id])) {
+                                $stock = new Stock();
+                                $stock->product_attribute_id = $relation->product_attribute_id;
+                                $stock->qty = $stock->productAttribute->begin_qty ?? 0;
+                            }
+                            $stock->qty -= $relation->qty * $orderPurchase['count'];
+                            $stock->save();
+                        }
+                    }
                 }
             }
         }
