@@ -121,6 +121,11 @@ class Order extends \app\models\BaseModel
         return parent::beforeSave($insert);
     }
 
+    /**
+     * @param $insert
+     * @param $changedAttributes
+     * @throws \yii\db\Exception
+     */
     public function afterSave($insert, $changedAttributes)
     {
         $this->handlePurchases();
@@ -134,6 +139,14 @@ class Order extends \app\models\BaseModel
     public function getPurchases()
     {
         return $this->hasMany(OrderPurchase::className(), ['order_id' => 'id'])->andWhere(['is_active' => 1, 'deleted' => null])->orderBy(['position' => SORT_ASC]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDeletedPurchases()
+    {
+        return $this->hasMany(OrderPurchase::className(), ['order_id' => 'id'])->andWhere(['deleted' => 1]);
     }
 
     /**
@@ -162,6 +175,9 @@ class Order extends \app\models\BaseModel
         $this->price = $fullPrice;
     }
 
+    /**
+     * @return string
+     */
     public function getPurchasesHtml()
     {
         return Yii::$app->controller->renderPartial('//order/_purchases', [
@@ -169,6 +185,9 @@ class Order extends \app\models\BaseModel
         ]);
     }
 
+    /**
+     * @return string
+     */
     public function getFormatPrice()
     {
         $this->setPrice();
@@ -176,6 +195,9 @@ class Order extends \app\models\BaseModel
         return number_format($this->price, 0, '', ' ') . ' р.';
     }
 
+    /**
+     * @return int
+     */
     public function getCountProducts()
     {
         $count = 0;
@@ -188,6 +210,9 @@ class Order extends \app\models\BaseModel
         return $count;
     }
 
+    /**
+     * @return string
+     */
     public function getPurchaseFieldHtml()
     {
         return Yii::$app->controller->renderPartial('//order/_table_purchases_item', [
@@ -195,6 +220,9 @@ class Order extends \app\models\BaseModel
         ]);
     }
 
+    /**
+     * @return string
+     */
     public function getPurchasesTableList()
     {
         return Yii::$app->controller->renderPartial('//order/_table_purchases', [
@@ -202,6 +230,9 @@ class Order extends \app\models\BaseModel
         ]);
     }
 
+    /**
+     * @return string
+     */
     public function getOrderHeaderHtml()
     {
         return Yii::$app->controller->renderPartial('//order/_order_header', [

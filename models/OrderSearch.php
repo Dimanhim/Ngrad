@@ -42,12 +42,12 @@ class OrderSearch extends Order
      */
     public function search($params)
     {
-        $query = Order::findSearch();
+        $query = Order::findSearch()->orderBy(['created_at' => SORT_DESC]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
-            'query' => $query,
+            'query' => $query
         ]);
 
         $this->load($params);

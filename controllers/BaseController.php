@@ -73,13 +73,12 @@ class BaseController extends Controller
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model->deleted = 1;
-        if($model->save()) {
+        if($model->deleteModel()) {
             Yii::$app->session->setFlash('success', 'Запись удалена успешно');
+            return $this->redirect(Yii::$app->request->referrer);
         }
-        return $this->redirect(Yii::$app->request->referrer);
-        //$this->findModel($id)->delete();
-        //return $this->redirect(['index']);
+
+        return $this->redirect(['index']);
     }
 
     /**

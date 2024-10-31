@@ -83,6 +83,17 @@ class OrderPurchase extends \app\models\BaseModel
     }
 
     /**
+     * @return bool
+     * @throws \yii\db\Exception
+     */
+    public function beforeDelete()
+    {
+        \Yii::$app->infoLog->add('beforeDelete', $this->attributes);
+        $this->removeFromStock();
+        return parent::beforeDelete();
+    }
+
+    /**
      * @return \yii\db\ActiveQuery
      */
     public function getOrder()
@@ -104,5 +115,67 @@ class OrderPurchase extends \app\models\BaseModel
     public function getSize()
     {
         return $this->hasOne(ProductSize::className(), ['id' => 'size_id']);
+    }
+
+    /**
+     * @param $insert
+     * @param $changedAttributes
+     */
+    public function afterSave($insert, $changedAttributes)
+    {
+        $this->setToStock($changedAttributes);
+
+        return parent::afterSave($insert, $changedAttributes);
+    }
+
+    /**
+     * @param null $changedAttributes
+     * @return bool
+     */
+    public function setToStock($changedAttributes = null)
+    {
+        if(!$model = $this->order) return false;
+
+        $qty = $this->qty - $changedAttributes['qty'] ?? 0;
+
+        $this->setToStockByProduct($this->product_id, $qty);
+    }
+
+    /**
+     * @param $productId
+     * @param $qty
+     * @param bool $deleted
+     * @throws \yii\db\Exception
+     */
+    public function setToStockByProduct($productId, $qty, $deleted = false)
+    {
+        if($product = Product::findOne($productId)) {
+            if($product->_relations) {
+                foreach($product->_relations as $relation) {
+                    if(!$stock = Stock::findOne(['product_attribute_id' => $relation->product_attribute_id])) {
+                        $stock = new Stock();
+                        $stock->product_attribute_id = $relation->product_attribute_id;
+                        $stock->qty = $stock->productAttribute->begin_qty ?? 0;
+                    }
+
+                    if($deleted) {
+                        $stock->qty += $relation->qty * $qty;
+                    }
+                    else {
+                        $stock->qty -= $relation->qty * $qty;
+                    }
+
+                    $stock->save();
+                }
+            }
+        }
+    }
+
+    /**
+     * @throws \yii\db\Exception
+     */
+    public function removeFromStock()
+    {
+        $this->setToStockByProduct($this->product_id, $this->qty, true);
     }
 }

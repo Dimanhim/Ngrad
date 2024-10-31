@@ -35,6 +35,7 @@ class BaseModel extends ActiveRecord
     ];
 
     public $_free_field;
+    public $_deleted = false;
 
     /**
      * @return array
@@ -80,7 +81,7 @@ class BaseModel extends ActiveRecord
     public function rules()
     {
         return [
-            [['image_field', 'image_fields', 'image_preview_field', '_free_field', 'unique_id', 'is_active', 'deleted', 'position', 'created_at', 'updated_at'], 'safe'],
+            [['image_field', 'image_fields', 'image_preview_field', '_free_field', 'unique_id', 'is_active', 'deleted', 'position', 'created_at', 'updated_at', '_deleted'], 'safe'],
         ];
     }
 
@@ -200,11 +201,13 @@ class BaseModel extends ActiveRecord
      * @throws \Throwable
      * @throws \yii\db\StaleObjectException
      */
-    public function deleteModel()
+    public function deleteModel($delete = false)
     {
+        $this->_deleted = true;
+        if($delete) return $this->delete();
         $this->is_active = null;
         $this->deleted = 1;
-        $this->update(false);
+        return $this->update(false);
     }
 
     /**
@@ -417,10 +420,17 @@ class BaseModel extends ActiveRecord
         return $this->isAttributeRequired($attributeName) ? ' class="required"' : '';
     }
 
-    public function delete()
+    /*
+    public function delete($isDeleted = false)
     {
         $this->deleted = 1;
+        $this->_deleted = true;
         return $this->update(false);
+    }*/
+
+    public function isDeleted()
+    {
+        return $this->_deleted;
     }
 
     /**

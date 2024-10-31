@@ -2,6 +2,7 @@
 
 namespace app\models\traits;
 
+use app\models\Order;
 use app\models\OrderPurchase;
 use app\models\Product;
 use app\models\ProductSize;
@@ -35,18 +36,18 @@ trait OrderTrait
     public function handlePurchases()
     {
         if($this->_purchases) {
+            if($orderPurchases = OrderPurchase::findModels()->andWhere(['order_id' => $this->id])->all()) {
+                foreach($orderPurchases as $orderPurchase) {
+                    $orderPurchase->deleteModel(true);
+                }
+            }
 
-            OrderPurchase::deleteAll(['order_id' => $this->id]);
+            if($this->isDeleted()) return false;
 
             foreach($this->_purchases as $purchase) {
                 $product = Product::findOne($purchase['product_id']);
                 $size = ProductSize::findOne(['name' => $purchase['size']]);
                 $qty = $purchase['count'];
-
-                //\Yii::$app->infoLog->add('product_id', $purchase['product_id'], '--save-log.txt');
-                //\Yii::$app->infoLog->add('product attributes', $product->attributes, '--save-log.txt');
-                //\Yii::$app->infoLog->add('size attributes', $size->attributes, '--save-log.txt');
-                //\Yii::$app->infoLog->add('size attributes', $size->attributes, '--save-log.txt');
 
                 if($product and $size and $qty) {
                     $model = new OrderPurchase();
@@ -63,10 +64,12 @@ trait OrderTrait
     /**
      * @throws \yii\db\Exception
      */
-    public function setPurchasesToStock()
+    public function setPurchasesToStock($qty)
     {
-        if($this->_purchases) {
-            foreach($this->_purchases as $orderPurchase) {
+        if(!$model = Order::findOne($this->id)) return false;
+
+        if($model->_purchases) {
+            foreach($model->_purchases as $orderPurchase) {
                 if($product = Product::findOne($orderPurchase['product_id'])) {
                     if($product->_relations) {
                         foreach($product->_relations as $relation) {
@@ -75,7 +78,10 @@ trait OrderTrait
                                 $stock->product_attribute_id = $relation->product_attribute_id;
                                 $stock->qty = $stock->productAttribute->begin_qty ?? 0;
                             }
-                            $stock->qty -= $relation->qty * $orderPurchase['count'];
+                            if($qty < 0) {
+                                $stock->qty -= $relation->qty * $orderPurchase['count'];
+                            }
+
                             $stock->save();
                         }
                     }
