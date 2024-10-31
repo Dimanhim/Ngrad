@@ -88,7 +88,6 @@ class OrderPurchase extends \app\models\BaseModel
      */
     public function beforeDelete()
     {
-        \Yii::$app->infoLog->add('beforeDelete', $this->attributes);
         $this->removeFromStock();
         return parent::beforeDelete();
     }
