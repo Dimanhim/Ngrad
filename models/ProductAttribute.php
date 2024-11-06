@@ -161,7 +161,7 @@ class ProductAttribute extends \app\models\BaseModel
             SELECT SUM(purchase_product_attributes.qty) as wait_count, product_attributes.name as attribute_name, product_attributes.id as attribute_id FROM purchase_product_attributes
             LEFT JOIN purchases ON purchases.id = purchase_product_attributes.purchase_id
             LEFT JOIN product_attributes ON product_attributes.id = purchase_product_attributes.product_attribute_id
-            WHERE product_attributes.id = ' . $this->id . ' AND purchases.status_id = ' . Purchase::STATUS_WAITING . '
+            WHERE product_attributes.id = ' . $this->id . ' AND purchases.status_id = ' . Purchase::STATUS_WAITING . ' AND purchases.deleted is NULL AND purchases.is_active = 1
             ';
         $query = Yii::$app->db->createCommand($sql)->queryAll();
         if($query and isset($query[0]) and isset($query[0]['wait_count'])) {
