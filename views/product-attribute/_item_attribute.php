@@ -24,7 +24,9 @@ use yii\helpers\Html;
                     <td><?= $attribute->name ?></td>
                     <td><?= $attribute->alias ?></td>
                     <td><?= $attribute->price ?></td>
-                    <td><?= $attribute->stockValue ?></td>
+                    <td>
+                        <?= Html::textInput('attribute-stock-value', $attribute->stockValue, ['class' => 'form-control form-control-sm change-stock-input-o', 'data-attribute' => $attribute->id]) ?>
+                    </td>
                     <td><?= $attribute->waitValue ?></td>
                     <td class="attribute-actions">
                         <?= $model->getActionButtonsList(['view', 'update'], 'product-attribute', $attribute, true) ?>

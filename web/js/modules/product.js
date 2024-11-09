@@ -79,6 +79,22 @@ $(document).ready(function() {
         calculateOrderPrice();
     });
 
+    /**
+     * Изменение количества атрибута на складе
+     * */
+    $(document).on('change', '.change-stock-input-o', function(e) {
+        e.preventDefault();
+
+        let attributeId = $(this).attr('data-attribute');
+        let value = $(this).val();
+
+        if(!confirm('Вы действительно хотите изменить количество на складе?')) {
+            setAttributeFromStock($(this), attributeId);
+            return false;
+        }
+
+        changeAttributeInStock(attributeId, value)
+    });
 
 
 
@@ -87,6 +103,44 @@ $(document).ready(function() {
 
 
 
+
+    /**
+     * устанавливает количество со склада
+     * */
+    function setAttributeFromStock(inputObj, attribute_id) {
+        $.ajax({
+            url: '/ajax/set-attributes-stock',
+            type: 'POST',
+            data: {attribute_id: attribute_id},
+            success: function (res) {
+                if(res.error == 0 && res.data) {
+                    inputObj.val(res.data);
+                }
+            },
+            error: function () {
+                alert('Error!');
+            }
+        });
+    }
+
+    /**
+     * устанавливает пользовательское количество на склад
+     * */
+    function changeAttributeInStock(attribute_id, value) {
+        $.ajax({
+            url: '/ajax/change-attributes-stock',
+            type: 'POST',
+            data: {attribute_id: attribute_id, value: value},
+            success: function (res) {
+                if(res.error == 0) {
+                    displaySuccessMessage('Количество сохранено успешно')
+                }
+            },
+            error: function () {
+                alert('Error!');
+            }
+        });
+    }
 
     /**
      * собирает массив данных из таблицы при расчете заказа
@@ -169,7 +223,6 @@ $(document).ready(function() {
             type: 'POST',
             data: {data: setOrderData()},
             success: function (res) {
-                console.log('res', res)
                 if(res.data) {
                     $('.calculate-order-o').val(res.data)
                 }

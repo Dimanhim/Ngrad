@@ -11,6 +11,7 @@ use app\models\ProductAttributeCategory;
 use app\models\ProductSize;
 use app\models\Purchase;
 use app\models\PurchaseProductAttribute;
+use app\models\Stock;
 use PHPUnit\TextUI\Help;
 use Yii;
 use yii\filters\ContentNegotiator;
@@ -73,6 +74,37 @@ class AjaxController extends Controller
         }
 
         $this->addData($totalPrice);
+
+        return $this->response();
+    }
+
+    /**
+     * @return mixed
+     * @throws \yii\db\Exception
+     */
+    public function actionChangeAttributesStock()
+    {
+        $attributeId = Yii::$app->request->post('attribute_id');
+        $value = Yii::$app->request->post('value');
+        if($stock = Stock::findOne(['product_attribute_id' => $attributeId])) {
+            $stock->qty = $value;
+            if($stock->save()) {
+                $this->addData($stock->qty);
+            }
+        }
+
+        return $this->response();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function actionSetAttributesStock()
+    {
+        $attributeId = Yii::$app->request->post('attribute_id');
+        if($stock = Stock::findOne(['product_attribute_id' => $attributeId])) {
+            $this->addData($stock->qty);
+        }
 
         return $this->response();
     }
