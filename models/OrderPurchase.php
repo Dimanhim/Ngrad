@@ -155,7 +155,7 @@ class OrderPurchase extends \app\models\BaseModel
                     if(!$stock = Stock::findOne(['product_attribute_id' => $relation->product_attribute_id])) {
                         $stock = new Stock();
                         $stock->product_attribute_id = $relation->product_attribute_id;
-                        $stock->qty = $stock->productAttribute->begin_qty ?? 0;
+                        $stock->qty = $stock->productAttribute->begin_qty ?: 0;
                     }
 
                     if($deleted) {

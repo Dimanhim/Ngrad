@@ -145,6 +145,7 @@ class ProductAttribute extends \app\models\BaseModel
      */
     public function getStockValue()
     {
+        return $this->stock->qty ?? null;
         if($this->stock) {
             return $this->stock->qty;
         }

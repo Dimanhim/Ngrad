@@ -86,11 +86,13 @@ class AjaxController extends Controller
     {
         $attributeId = Yii::$app->request->post('attribute_id');
         $value = Yii::$app->request->post('value');
-        if($stock = Stock::findOne(['product_attribute_id' => $attributeId])) {
-            $stock->qty = $value;
-            if($stock->save()) {
-                $this->addData($stock->qty);
-            }
+        if(!$stock = Stock::findOne(['product_attribute_id' => $attributeId])) {
+            $stock = new Stock();
+            $stock->product_attribute_id = $attributeId;
+        }
+        $stock->qty = $value;
+        if($stock->save()) {
+            $this->addData($stock->qty);
         }
 
         return $this->response();
@@ -375,6 +377,7 @@ class AjaxController extends Controller
             $model->size_id = $size->id;
         }
         $model->qty = $qty;
+
         if($model->save()) {
             return $this->response('Заказ успешно обновлен');
         }

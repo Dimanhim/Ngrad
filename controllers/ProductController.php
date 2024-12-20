@@ -133,7 +133,6 @@ class ProductController extends BaseController
             if($model->validate()) {
                 $order = new Order();
                 $order->_purchases = json_decode($model->data, true);
-                \Yii::$app->infoLog->add('_purchases', $order->_purchases);
                 if($model->supplier_id) $order->client_id = $model->supplier_id;
                 elseif($model->supplier_name) {
                     $client = new Client();
